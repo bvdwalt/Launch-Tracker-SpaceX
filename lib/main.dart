@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:spacex_flights/DTOs/flight.dart';
 import 'package:spacex_flights/FlightListItem.dart';
 import 'package:spacex_flights/Services/FlightDataService.dart';
+import 'package:http/http.dart' as http;
 
-void main() => runApp(MyApp());
+void main() => runApp(SpaceXFlights());
 
-class MyApp extends StatelessWidget {
+class SpaceXFlights extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -30,13 +31,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Flight> _flights = new List<Flight>();
-  FlightDataService _flightDataService = new FlightDataService();
+
+  http.Client client = new http.Client();
 
   @override
   Widget build(BuildContext context) {
     Widget body = new Scaffold(
       body: FutureBuilder(
-          future: _flightDataService.fetchFlightData(),
+          future: FlightDataService.fetchFlightData(client),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done &&
                 snapshot.hasData != null) {
