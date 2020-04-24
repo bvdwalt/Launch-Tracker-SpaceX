@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:spacex_flights/DTOs/flight.dart';
-import 'package:intl/intl.dart';
+import 'package:spacex_flights/src/ui/DateTimeTextWidget.dart';
+import '../models/flight.dart';
+import 'flight_detail.dart';
 
-class FlightListItem extends StatelessWidget {
+class FlightListItem extends StatefulWidget {
   final Flight flight;
 
   FlightListItem(this.flight);
 
+  @override
+  _FlightListItemState createState() => _FlightListItemState();
+}
+
+class _FlightListItemState extends State<FlightListItem> {
   Widget titleColumn() {
     return Expanded(
       flex: 2,
@@ -14,9 +20,9 @@ class FlightListItem extends StatelessWidget {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(flight.missionName,
+          Text(widget.flight.missionName,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Text('#${flight.flightNumber.toString()}')
+          Text('#${widget.flight.flightNumber.toString()}')
         ],
       ),
     );
@@ -30,17 +36,15 @@ class FlightListItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Text(
-            flight.launchSite.siteName,
+            widget.flight.launchSite.siteName,
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
-          Text(
-            DateFormat.yMMMd().format(flight.launchDateUtc) +
-                "\n" +
-                DateFormat.Hms().format(flight.launchDateUtc),
-            textAlign: TextAlign.right,
-            style: TextStyle(
-                color: flight.upcoming ? Colors.orangeAccent[200] : Colors.greenAccent[200]),
-          ),
+          DateTimeTextWidget(
+              dateTime: widget.flight.launchDateUtc,
+              style: TextStyle(
+                  color: widget.flight.upcoming
+                      ? Colors.orange[200]
+                      : Colors.green[200])),
         ],
       ),
     );
@@ -53,7 +57,7 @@ class FlightListItem extends StatelessWidget {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(flight.rocket.rocketName, style: TextStyle(fontSize: 12)),
+          Text(widget.flight.rocket.rocketName, style: TextStyle(fontSize: 12)),
         ],
       ),
     );
@@ -76,6 +80,19 @@ class FlightListItem extends StatelessWidget {
                 ],
               ),
             ),
-            onTap: () => print(flight.flightNumber)));
+            onTap: () => openDetailPage()));
+  }
+
+  openDetailPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) {
+            return FlightDetail();
+          },
+          settings: RouteSettings(
+            arguments: widget.flight,
+          )),
+    );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:spacex_flights/DTOs/cores.dart';
+import 'cores.dart';
 
 class FirstStage {
   List<Cores> cores;
@@ -14,11 +14,11 @@ class FirstStage {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.cores != null) {
-      data['cores'] = this.cores.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   if (this.cores != null) {
+  //     data['cores'] = this.cores.map((v) => v.toJson()).toList();
+  //   }
+  //   return data;
+  // }
 }

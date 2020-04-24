@@ -50,23 +50,23 @@ class OrbitParams {
     meanAnomaly = json['mean_anomaly']?.toDouble();
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['reference_system'] = this.referenceSystem;
-    data['regime'] = this.regime;
-    data['longitude'] = this.longitude;
-    data['semi_major_axis_km'] = this.semiMajorAxisKm;
-    data['eccentricity'] = this.eccentricity;
-    data['periapsis_km'] = this.periapsisKm;
-    data['apoapsis_km'] = this.apoapsisKm;
-    data['inclination_deg'] = this.inclinationDeg;
-    data['period_min'] = this.periodMin;
-    data['lifespan_years'] = this.lifespanYears;
-    data['epoch'] = this.epoch;
-    data['mean_motion'] = this.meanMotion;
-    data['raan'] = this.raan;
-    data['arg_of_pericenter'] = this.argOfPericenter;
-    data['mean_anomaly'] = this.meanAnomaly;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['reference_system'] = this.referenceSystem;
+  //   data['regime'] = this.regime;
+  //   data['longitude'] = this.longitude;
+  //   data['semi_major_axis_km'] = this.semiMajorAxisKm;
+  //   data['eccentricity'] = this.eccentricity;
+  //   data['periapsis_km'] = this.periapsisKm;
+  //   data['apoapsis_km'] = this.apoapsisKm;
+  //   data['inclination_deg'] = this.inclinationDeg;
+  //   data['period_min'] = this.periodMin;
+  //   data['lifespan_years'] = this.lifespanYears;
+  //   data['epoch'] = this.epoch;
+  //   data['mean_motion'] = this.meanMotion;
+  //   data['raan'] = this.raan;
+  //   data['arg_of_pericenter'] = this.argOfPericenter;
+  //   data['mean_anomaly'] = this.meanAnomaly;
+  //   return data;
+  // }
 }

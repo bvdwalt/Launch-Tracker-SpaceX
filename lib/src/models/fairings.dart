@@ -13,12 +13,12 @@ class Fairings {
     ship = json['ship'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['reused'] = this.reused;
-    data['recovery_attempt'] = this.recoveryAttempt;
-    data['recovered'] = this.recovered;
-    data['ship'] = this.ship;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['reused'] = this.reused;
+  //   data['recovery_attempt'] = this.recoveryAttempt;
+  //   data['recovered'] = this.recovered;
+  //   data['ship'] = this.ship;
+  //   return data;
+  // }
 }

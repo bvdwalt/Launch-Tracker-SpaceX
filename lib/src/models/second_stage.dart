@@ -16,12 +16,12 @@ class SecondStage {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['block'] = this.block;
-    if (this.payloads != null) {
-      data['payloads'] = this.payloads.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['block'] = this.block;
+  //   if (this.payloads != null) {
+  //     data['payloads'] = this.payloads.map((v) => v.toJson()).toList();
+  //   }
+  //   return data;
+  // }
 }

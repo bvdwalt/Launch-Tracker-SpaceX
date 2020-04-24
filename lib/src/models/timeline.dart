@@ -71,30 +71,30 @@ class Timeline {
     payloadDeploy = json['payload_deploy'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['webcast_liftoff'] = this.webcastLiftoff;
-    data['go_for_prop_loading'] = this.goForPropLoading;
-    data['rp1_loading'] = this.rp1Loading;
-    data['stage1_lox_loading'] = this.stage1LoxLoading;
-    data['stage2_lox_loading'] = this.stage2LoxLoading;
-    data['engine_chill'] = this.engineChill;
-    data['prelaunch_checks'] = this.prelaunchChecks;
-    data['propellant_pressurization'] = this.propellantPressurization;
-    data['go_for_launch'] = this.goForLaunch;
-    data['ignition'] = this.ignition;
-    data['liftoff'] = this.liftoff;
-    data['maxq'] = this.maxq;
-    data['meco'] = this.meco;
-    data['stage_sep'] = this.stageSep;
-    data['second_stage_ignition'] = this.secondStageIgnition;
-    data['fairing_deploy'] = this.fairingDeploy;
-    data['first_stage_entry_burn'] = this.firstStageEntryBurn;
-    data['first_stage_landing'] = this.firstStageLanding;
-    data['seco-1'] = this.seco1;
-    data['second_stage_restart'] = this.secondStageRestart;
-    data['seco-2'] = this.seco2;
-    data['payload_deploy'] = this.payloadDeploy;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['webcast_liftoff'] = this.webcastLiftoff;
+  //   data['go_for_prop_loading'] = this.goForPropLoading;
+  //   data['rp1_loading'] = this.rp1Loading;
+  //   data['stage1_lox_loading'] = this.stage1LoxLoading;
+  //   data['stage2_lox_loading'] = this.stage2LoxLoading;
+  //   data['engine_chill'] = this.engineChill;
+  //   data['prelaunch_checks'] = this.prelaunchChecks;
+  //   data['propellant_pressurization'] = this.propellantPressurization;
+  //   data['go_for_launch'] = this.goForLaunch;
+  //   data['ignition'] = this.ignition;
+  //   data['liftoff'] = this.liftoff;
+  //   data['maxq'] = this.maxq;
+  //   data['meco'] = this.meco;
+  //   data['stage_sep'] = this.stageSep;
+  //   data['second_stage_ignition'] = this.secondStageIgnition;
+  //   data['fairing_deploy'] = this.fairingDeploy;
+  //   data['first_stage_entry_burn'] = this.firstStageEntryBurn;
+  //   data['first_stage_landing'] = this.firstStageLanding;
+  //   data['seco-1'] = this.seco1;
+  //   data['second_stage_restart'] = this.secondStageRestart;
+  //   data['seco-2'] = this.seco2;
+  //   data['payload_deploy'] = this.payloadDeploy;
+  //   return data;
+  // }
 }

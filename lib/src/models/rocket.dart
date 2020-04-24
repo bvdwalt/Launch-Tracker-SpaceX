@@ -1,6 +1,7 @@
+import 'package:spacex_flights/src/models/second_stage.dart';
+
 import 'fairings.dart';
-import 'firstStage.dart';
-import 'secondStage.dart';
+import 'first_stage.dart';
 
 class Rocket {
   String rocketId;
@@ -33,20 +34,20 @@ class Rocket {
         : null;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['rocket_id'] = this.rocketId;
-    data['rocket_name'] = this.rocketName;
-    data['rocket_type'] = this.rocketType;
-    if (this.firstStage != null) {
-      data['first_stage'] = this.firstStage.toJson();
-    }
-    if (this.secondStage != null) {
-      data['second_stage'] = this.secondStage.toJson();
-    }
-    if (this.fairings != null) {
-      data['fairings'] = this.fairings.toJson();
-    }
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['rocket_id'] = this.rocketId;
+  //   data['rocket_name'] = this.rocketName;
+  //   data['rocket_type'] = this.rocketType;
+  //   if (this.firstStage != null) {
+  //     data['first_stage'] = this.firstStage.toJson();
+  //   }
+  //   if (this.secondStage != null) {
+  //     data['second_stage'] = this.secondStage.toJson();
+  //   }
+  //   if (this.fairings != null) {
+  //     data['fairings'] = this.fairings.toJson();
+  //   }
+  //   return data;
+  // }
 }

@@ -35,18 +35,18 @@ class Cores {
     landingVehicle = json['landing_vehicle'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['core_serial'] = this.coreSerial;
-    data['flight'] = this.flight;
-    data['block'] = this.block;
-    data['gridfins'] = this.gridfins;
-    data['legs'] = this.legs;
-    data['reused'] = this.reused;
-    data['land_success'] = this.landSuccess;
-    data['landing_intent'] = this.landingIntent;
-    data['landing_type'] = this.landingType;
-    data['landing_vehicle'] = this.landingVehicle;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['core_serial'] = this.coreSerial;
+  //   data['flight'] = this.flight;
+  //   data['block'] = this.block;
+  //   data['gridfins'] = this.gridfins;
+  //   data['legs'] = this.legs;
+  //   data['reused'] = this.reused;
+  //   data['land_success'] = this.landSuccess;
+  //   data['landing_intent'] = this.landingIntent;
+  //   data['landing_type'] = this.landingType;
+  //   data['landing_vehicle'] = this.landingVehicle;
+  //   return data;
+  // }
 }

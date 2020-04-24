@@ -41,20 +41,20 @@ class Links {
     flickrImages = json['flickr_images'].cast<String>();
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['mission_patch'] = this.missionPatch;
-    data['mission_patch_small'] = this.missionPatchSmall;
-    data['reddit_campaign'] = this.redditCampaign;
-    data['reddit_launch'] = this.redditLaunch;
-    data['reddit_recovery'] = this.redditRecovery;
-    data['reddit_media'] = this.redditMedia;
-    data['presskit'] = this.presskit;
-    data['article_link'] = this.articleLink;
-    data['wikipedia'] = this.wikipedia;
-    data['video_link'] = this.videoLink;
-    data['youtube_id'] = this.youtubeId;
-    data['flickr_images'] = this.flickrImages;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['mission_patch'] = this.missionPatch;
+  //   data['mission_patch_small'] = this.missionPatchSmall;
+  //   data['reddit_campaign'] = this.redditCampaign;
+  //   data['reddit_launch'] = this.redditLaunch;
+  //   data['reddit_recovery'] = this.redditRecovery;
+  //   data['reddit_media'] = this.redditMedia;
+  //   data['presskit'] = this.presskit;
+  //   data['article_link'] = this.articleLink;
+  //   data['wikipedia'] = this.wikipedia;
+  //   data['video_link'] = this.videoLink;
+  //   data['youtube_id'] = this.youtubeId;
+  //   data['flickr_images'] = this.flickrImages;
+  //   return data;
+  // }
 }

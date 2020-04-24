@@ -1,4 +1,4 @@
-import 'orbitParams.dart';
+import 'orbit_params.dart';
 
 class Payloads {
   String payloadId;
@@ -57,26 +57,26 @@ class Payloads {
     cargoManifest = json['cargo_manifest'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['payload_id'] = this.payloadId;
-    data['norad_id'] = this.noradId;
-    data['cap_serial'] = this.capSerial;
-    data['reused'] = this.reused;
-    data['customers'] = this.customers;
-    data['nationality'] = this.nationality;
-    data['manufacturer'] = this.manufacturer;
-    data['payload_type'] = this.payloadType;
-    data['payload_mass_kg'] = this.payloadMassKg;
-    data['payload_mass_lbs'] = this.payloadMassLbs;
-    data['orbit'] = this.orbit;
-    if (this.orbitParams != null) {
-      data['orbit_params'] = this.orbitParams.toJson();
-    }
-    data['mass_returned_kg'] = this.massReturnedKg;
-    data['mass_returned_lbs'] = this.massReturnedLbs;
-    data['flight_time_sec'] = this.flightTimeSec;
-    data['cargo_manifest'] = this.cargoManifest;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['payload_id'] = this.payloadId;
+  //   data['norad_id'] = this.noradId;
+  //   data['cap_serial'] = this.capSerial;
+  //   data['reused'] = this.reused;
+  //   data['customers'] = this.customers;
+  //   data['nationality'] = this.nationality;
+  //   data['manufacturer'] = this.manufacturer;
+  //   data['payload_type'] = this.payloadType;
+  //   data['payload_mass_kg'] = this.payloadMassKg;
+  //   data['payload_mass_lbs'] = this.payloadMassLbs;
+  //   data['orbit'] = this.orbit;
+  //   if (this.orbitParams != null) {
+  //     data['orbit_params'] = this.orbitParams.toJson();
+  //   }
+  //   data['mass_returned_kg'] = this.massReturnedKg;
+  //   data['mass_returned_lbs'] = this.massReturnedLbs;
+  //   data['flight_time_sec'] = this.flightTimeSec;
+  //   data['cargo_manifest'] = this.cargoManifest;
+  //   return data;
+  // }
 }
