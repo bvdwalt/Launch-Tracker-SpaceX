@@ -1,18 +1,17 @@
 import 'dart:convert';
-import 'package:http/http.dart' show Client;
+import 'package:http/http.dart' as http;
 import '../models/flights.dart';
 
 class FlightProvider {
-  Client _client = Client();
   final _baseUrl = 'https://api.spacexdata.com/v3';
-  Flights parseFlights(String responseBody) {
+  static Flights parseFlights(String responseBody) {
     Flights flightList = Flights.fromJson(json.decode(responseBody));
 
     return flightList;
   }
 
-  Future<Flights> fetchFlights() async {
-    final response = await _client.get("$_baseUrl/launches");
+  Future<Flights> fetchFlights(http.Client client) async {
+    final response = await client.get("$_baseUrl/launches");
 
     if (response.statusCode == 200) {
       return parseFlights(response.body);

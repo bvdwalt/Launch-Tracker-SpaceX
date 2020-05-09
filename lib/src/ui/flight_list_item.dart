@@ -22,7 +22,7 @@ class _FlightListItemState extends State<FlightListItem> {
         children: <Widget>[
           Text(widget.flight.missionName,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Text('#${widget.flight.flightNumber.toString()}')
+          Text(widget.flight.flightNumber.toString())
         ],
       ),
     );

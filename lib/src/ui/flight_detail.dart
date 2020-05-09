@@ -79,7 +79,7 @@ class FlightDetail extends StatelessWidget {
                   ],
                 ),
                 Container(margin: EdgeInsets.only(top: 8.0, bottom: 8.0)),
-                 Text(flight.upcoming.toString()),
+                 Text(flight.upcoming ? "Upcoming" : "Past"),
               ],
             ),
           ),

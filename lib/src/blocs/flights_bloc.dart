@@ -9,8 +9,8 @@ class FlightsBloc {
   Stream<Flights> get allFlights => _flightsFetcher.stream;
 
   fetchAllFlights() async {
-    Flights itemModel = await _repository.fetchAllFlights();
-    _flightsFetcher.sink.add(itemModel);
+    Flights flights = await _repository.fetchAllFlights();
+    _flightsFetcher.sink.add(flights);
   }
 
   dispose() {

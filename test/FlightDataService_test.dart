@@ -1,34 +1,36 @@
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:spacex_flights/DTOs/flight.dart';
-// import 'package:spacex_flights/Services/FlightDataService.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:spacex_flights/service_locator.dart';
+import '../lib/src/resources/repository.dart';
+import '../lib/src/models/flights.dart';
+import 'package:matcher/matcher.dart';
+import 'package:mockito/mockito.dart';
+import 'TestFlightObj.dart';
+import 'package:http/http.dart' as http;
 
-// import 'package:matcher/matcher.dart';
-// import 'package:mockito/mockito.dart';
-// import 'package:http/http.dart' as http;
+void main() {
+  group('fetchFlightData', () {
+    test('returns a flight if the http call completes successfully', () async {
+      registerServices(testing: true);
 
-// import 'TestFlightObj.dart';
+      final _repository = Repository();
+      final client = getIt.get<http.Client>();
 
-// class MockClient extends Mock implements http.Client {}
+      when(client.get('https://api.spacexdata.com/v3/launches')).thenAnswer(
+          (_) async => http.Response(TestFlightObj.flightJson, 200));
 
-// void main() {
-//   group('fetchFlightData', () {
-//     test('returns a flight if the http call completes successfully', () async {
-//       final client = MockClient();
+      expect(await _repository.fetchAllFlights(), TypeMatcher<Flights>());
+    });
 
-//       when(client.get('https://api.spacexdata.com/v3/launches'))
-//           .thenAnswer((_) async => http.Response(TestFlightObj.flightJson, 200));
+    test('throws an exception if the http call completes with an error', () {
+      registerServices(testing: true);
 
-//       expect(await FlightDataService.fetchFlights(client),
-//           TypeMatcher<List<Flight>>());
-//     });
+      final _repository = Repository();
+      final client = getIt.get<http.Client>();
 
-//     test('throws an exception if the http call completes with an error', () {
-//       final client = MockClient();
+      when(client.get('https://api.spacexdata.com/v3/launches'))
+          .thenAnswer((_) async => http.Response('Internal Error', 500));
 
-//       when(client.get('https://api.spacexdata.com/v3/launches'))
-//           .thenAnswer((_) async => http.Response('Internal Error', 500));
-
-//       expect(FlightDataService.fetchFlights(client), throwsException);
-//     });
-//   });
-// }
+      expect(_repository.fetchAllFlights(), throwsException);
+    });
+  });
+}
