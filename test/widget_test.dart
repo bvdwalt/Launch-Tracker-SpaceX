@@ -6,7 +6,7 @@ import 'TestFlightObj.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  testWidgets('FlightListItem loads flight correctly',
+  testWidgets('App loads flight correctly',
       (WidgetTester tester) async {
     registerServices(testing: true);
 

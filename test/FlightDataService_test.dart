@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spacex_flights/service_locator.dart';
-import '../lib/src/resources/repository.dart';
-import '../lib/src/models/flights.dart';
+import 'package:spacex_flights/src/resources/repository.dart';
+import 'package:spacex_flights/src/models/flights.dart';
 import 'package:matcher/matcher.dart';
 import 'package:mockito/mockito.dart';
 import 'TestFlightObj.dart';

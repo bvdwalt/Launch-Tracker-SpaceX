@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'src/resources/flight_provider.dart';
+import 'package:spacex_flights/src/resources/flight_provider.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
@@ -7,7 +7,7 @@ import 'package:mockito/mockito.dart';
 final getIt = GetIt.instance;
 
 void registerServices({bool testing = false}) {
-  //getIt.reset();
+  getIt.reset();
   getIt.registerLazySingleton(() => FlightProvider());
 
   if (!testing) {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import '../../service_locator.dart';
-import '../models/flights.dart';
-import 'flight_provider.dart';
+import 'package:spacex_flights/src/models/flights.dart';
+import 'package:spacex_flights/src/resources/flight_provider.dart';
 import 'package:http/http.dart' as http;
 
 class Repository {
