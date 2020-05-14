@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/flights.dart';
+import 'package:spacex_flights/src/models/flights.dart';
 
 class FlightProvider {
   final _baseUrl = 'https://api.spacexdata.com/v3';

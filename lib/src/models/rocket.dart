@@ -1,7 +1,6 @@
-import 'package:spacex_flights/src/models/second_stage.dart';
-
 import 'fairings.dart';
 import 'first_stage.dart';
+import 'second_stage.dart';
 
 class Rocket {
   String rocketId;

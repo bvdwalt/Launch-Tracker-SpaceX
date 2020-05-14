@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/ui/DateTimeTextWidget.dart';
-import '../models/flight.dart';
 import 'flight_detail.dart';
 
 class FlightListItem extends StatefulWidget {
@@ -43,8 +43,8 @@ class _FlightListItemState extends State<FlightListItem> {
               dateTime: widget.flight.launchDateUtc,
               style: TextStyle(
                   color: widget.flight.upcoming
-                      ? Colors.orange[200]
-                      : Colors.green[200])),
+                      ? Colors.orange[300]
+                      : Colors.green[300])),
         ],
       ),
     );

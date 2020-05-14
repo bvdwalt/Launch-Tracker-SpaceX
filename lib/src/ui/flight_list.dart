@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/flights.dart';
-import '../ui/flight_list_item.dart';
-import '../blocs/flights_bloc.dart';
+import 'package:spacex_flights/src/blocs/flights_bloc.dart';
+import 'package:spacex_flights/src/models/flights.dart';
+
+import 'flight_list_item.dart';
 
 class FlightList extends StatefulWidget {
   @override

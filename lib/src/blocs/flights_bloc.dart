@@ -1,6 +1,6 @@
-import '../resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
-import '../models/flights.dart';
+import 'package:spacex_flights/src/models/flights.dart';
+import 'package:spacex_flights/src/resources/repository.dart';
 
 class FlightsBloc {
   final _repository = Repository();

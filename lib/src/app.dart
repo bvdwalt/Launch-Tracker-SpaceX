@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/flight_list.dart';
+import 'package:spacex_flights/src/ui/flight_list.dart';
 
 class App extends StatelessWidget {
   @override

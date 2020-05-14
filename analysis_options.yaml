@@ -1,0 +1,7 @@
+analyzer:
+  errors:
+    avoid_relative_lib_imports: error
+
+linter:
+  rules:
+    - avoid_relative_lib_imports

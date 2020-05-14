@@ -19,7 +19,10 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('1', skipOffstage: false), findsOneWidget);
-    expect(find.text('FalconSat', skipOffstage: false), findsOneWidget);
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('FalconSat'), findsOneWidget);
+
+    expect(find.text('110'), findsOneWidget);
+    expect(find.text('ANASIS-II'), findsOneWidget);
   });
 }

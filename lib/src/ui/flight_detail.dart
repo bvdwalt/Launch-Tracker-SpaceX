@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/flight.dart';
+import 'package:spacex_flights/src/models/flight.dart';
 
 class FlightDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Flight flight = ModalRoute.of(context).settings.arguments;
+    print(flight.missionName);
 
     return Scaffold(
       body: SafeArea(
