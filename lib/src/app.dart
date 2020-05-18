@@ -7,9 +7,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       themeMode: ThemeMode.system,
       theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.lightBlue,
-      ),
+          brightness: Brightness.light, primarySwatch: Colors.lightBlue),
       darkTheme:
           ThemeData(brightness: Brightness.dark, primarySwatch: Colors.blue),
       home: Scaffold(

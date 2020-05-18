@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'launch_failure_details.dart';
 import 'launch_site.dart';
 import 'links.dart';
 import 'rocket.dart';
@@ -22,6 +23,7 @@ class Flight {
   Telemetry telemetry;
   LaunchSite launchSite;
   bool launchSuccess;
+  LaunchFailureDetail launchFailureDetail;
   Links links;
   String details;
   bool upcoming;
@@ -54,6 +56,7 @@ class Flight {
       this.telemetry,
       this.launchSite,
       this.launchSuccess,
+      this.launchFailureDetail,
       this.links,
       this.details,
       this.upcoming,
@@ -75,8 +78,12 @@ class Flight {
     missionId = json['mission_id'].cast<String>();
     launchYear = json['launch_year'];
     launchDateUnix = json['launch_date_unix'];
-    launchDateUtc = json['launch_date_utc'] != null ? DateTime.parse(json['launch_date_utc']) : null;
-    launchDateLocal = json['launch_date_local'] != null ? DateTime.parse(json['launch_date_local']) : null;
+    launchDateUtc = json['launch_date_utc'] != null
+        ? DateTime.parse(json['launch_date_utc'])
+        : null;
+    launchDateLocal = json['launch_date_local'] != null
+        ? DateTime.parse(json['launch_date_local'])
+        : null;
     isTentative = json['is_tentative'];
     tentativeMaxPrecision = json['tentative_max_precision'];
     tbd = json['tbd'];
@@ -91,21 +98,36 @@ class Flight {
         ? new LaunchSite.fromJson(json['launch_site'])
         : null;
     launchSuccess = json['launch_success'];
+    launchFailureDetail = json['launch_failure_details'] != null
+        ? LaunchFailureDetail.fromJson(json['launch_failure_details'])
+        : null;
     links = json['links'] != null ? new Links.fromJson(json['links']) : null;
     details = json['details'];
     upcoming = json['upcoming'];
-    staticFireDateUtc = json['static_fire_date_utc'] != null ? DateTime.parse(json['static_fire_date_utc']) : null;
+    staticFireDateUtc = json['static_fire_date_utc'] != null
+        ? DateTime.parse(json['static_fire_date_utc'])
+        : null;
     staticFireDateUnix = json['static_fire_date_unix'];
     timeline = json['timeline'] != null
         ? new Timeline.fromJson(json['timeline'])
         : null;
     crew = json['crew']?.cast<String>();
-    lastDateUpdate = json['last_date_update'] != null ? DateTime.parse(json['last_date_update']) : null;
-    lastLlLaunchDate = json['last_ll_launch_date'] != null ? DateTime.parse(json['last_ll_launch_date']) : null;
-    lastLlUpdate = json['last_ll_update'] != null ? DateTime.parse(json['last_ll_update']) : null;
-    lastWikiLaunchDate = json['last_wiki_launch_date'] != null ? DateTime.parse(json['last_wiki_launch_date']) : null;
+    lastDateUpdate = json['last_date_update'] != null
+        ? DateTime.parse(json['last_date_update'])
+        : null;
+    lastLlLaunchDate = json['last_ll_launch_date'] != null
+        ? DateTime.parse(json['last_ll_launch_date'])
+        : null;
+    lastLlUpdate = json['last_ll_update'] != null
+        ? DateTime.parse(json['last_ll_update'])
+        : null;
+    lastWikiLaunchDate = json['last_wiki_launch_date'] != null
+        ? DateTime.parse(json['last_wiki_launch_date'])
+        : null;
     lastWikiRevision = json['last_wiki_revision'];
-    lastWikiUpdate = json['last_wiki_update'] != null ? DateTime.parse(json['last_wiki_update']) : null;
+    lastWikiUpdate = json['last_wiki_update'] != null
+        ? DateTime.parse(json['last_wiki_update'])
+        : null;
     launchDateSource = json['launch_date_source'];
   }
 

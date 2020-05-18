@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -54,18 +55,25 @@ class FlightDetail extends StatelessWidget {
               childAspectRatio: 10,
               padding: EdgeInsets.only(left: 20, right: 20),
               children: <Widget>[
-                detailWidget("Launch Date",
-                    DateFormat.yMMMEd().format(flight.launchDateUtc.toLocal())),
-                detailWidget("Launch Site", flight.launchSite.siteNameLong),
+                detailWidget(
+                    "Launch Date",
+                    DateFormat.yMMMEd()
+                        .add_jm()
+                        .format(flight.launchDateUtc.toLocal())),
                 detailWidget("Mission Name", flight.missionName),
+                detailWidget("Launch Site", flight.launchSite.siteNameLong),
                 detailWidget("Flight Number", flight.flightNumber.toString()),
                 detailWidget("Rocket Name", flight.rocket.rocketName),
                 detailWidget("Rocket Type", flight.rocket.rocketType),
-                detailWidget("First Stage Block",
-                    flight.rocket.firstStage.cores[0].block.toString()),
                 detailWidgetWithLink("Wikipedia Link", flight.links.wikipedia),
                 detailWidgetWithLink(
-                    "YouTube Link",
+                    "Reddit Campaign", flight.links.redditCampaign),
+                detailWidgetWithLink(
+                    "Reddit Launch", flight.links.redditLaunch),
+                detailWidgetWithLink(
+                    "Reddit Recovery", flight.links.redditRecovery),
+                detailWidgetWithLink(
+                    "YouTube",
                     flight.links.youtubeId == null
                         ? null
                         : 'https://www.youtube.com/watch?v=${flight.links.youtubeId}'),
@@ -74,6 +82,7 @@ class FlightDetail extends StatelessWidget {
       ),
     );
   }
+  
 }
 
 detailWidget(String title, String value) {
@@ -88,9 +97,10 @@ detailWidget(String title, String value) {
           textAlign: TextAlign.left,
         )),
         Expanded(
-            child: Text(
+            child: AutoSizeText(
           value ?? '',
           textAlign: TextAlign.right,
+          maxLines: 2,
         ))
       ]);
 }
@@ -112,10 +122,11 @@ detailWidgetWithLink(String title, String value) {
                   print(value);
                   launchURL(value);
                 },
-                child: Text(
+                child: AutoSizeText(
                   value ?? '',
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.blue),
+                  maxLines: 2,
                 )))
       ]);
 }
