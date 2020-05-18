@@ -29,15 +29,17 @@ void main() {
       expect(find.text('ANASIS-II'), findsOneWidget);
 
       await tester.tap(find.byType(FlightListItem).first);
-      await tester.tap(find.byType(GestureDetector).first);
       await tester.pumpAndSettle();
+      await tester.tap(find.byType(GestureDetector).first);
+      await tester.pump();
 
       await tester.pageBack();
       await tester.pump();
 
       await tester.tap(find.byType(FlightListItem).last);
-      await tester.tap(find.byType(GestureDetector).last);
       await tester.pumpAndSettle();
+      await tester.tap(find.byType(GestureDetector).last);
+      await tester.pump();
     });
   });
 }
