@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
+import 'package:spacex_flights/src/helpers/url_helper.dart';
 import 'package:spacex_flights/src/models/flight.dart';
 
 class FlightDetail extends StatelessWidget {
@@ -11,80 +14,108 @@ class FlightDetail extends StatelessWidget {
         top: false,
         bottom: false,
         child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                  expandedHeight: 200.0,
-                  floating: false,
-                  pinned: true,
-                  elevation: 0.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    background: flight.links.missionPatchSmall == null
-                        ? Center(child: Text("No Image yet"))
-                        : Image.network(
-                            flight.links.missionPatchSmall,
-                            fit: BoxFit.scaleDown,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
-                                      : null,
-                                ),
-                              );
-                            },
-                          ),
-                  )),
-            ];
-          },
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                    expandedHeight: 200.0,
+                    floating: false,
+                    pinned: true,
+                    elevation: 0.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
+                      background: flight.links.missionPatchSmall == null
+                          ? Center(child: Text("No Image yet"))
+                          : Image.network(
+                              flight.links.missionPatchSmall,
+                              fit: BoxFit.scaleDown,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                    )),
+              ];
+            },
+            body: GridView.count(
+              physics: BouncingScrollPhysics(),
+              crossAxisCount: 1,
+              childAspectRatio: 10,
+              padding: EdgeInsets.only(left: 20, right: 20),
               children: <Widget>[
-                Container(margin: EdgeInsets.only(top: 5.0)),
-                Text(
-                  flight.missionName + ' #' + flight.flightNumber.toString(),
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(margin: EdgeInsets.only(top: 8.0, bottom: 8.0)),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(left: 1.0, right: 1.0),
-                    ),
-                    Text(
-                      flight.rocket.rocketName,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 10.0, right: 10.0),
-                    ),
-                    Text(
-                      flight.launchDateUtc.toString(),
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(margin: EdgeInsets.only(top: 8.0, bottom: 8.0)),
-                 Text(flight.upcoming ? "Upcoming" : "Past"),
+                detailWidget("Launch Date",
+                    DateFormat.yMMMEd().format(flight.launchDateUtc.toLocal())),
+                detailWidget("Launch Site", flight.launchSite.siteNameLong),
+                detailWidget("Mission Name", flight.missionName),
+                detailWidget("Flight Number", flight.flightNumber.toString()),
+                detailWidget("Rocket Name", flight.rocket.rocketName),
+                detailWidget("Rocket Type", flight.rocket.rocketType),
+                detailWidget("First Stage Block",
+                    flight.rocket.firstStage.cores[0].block.toString()),
+                detailWidgetWithLink("Wikipedia Link", flight.links.wikipedia),
+                detailWidgetWithLink(
+                    "YouTube Link",
+                    flight.links.youtubeId == null
+                        ? null
+                        : 'https://www.youtube.com/watch?v=${flight.links.youtubeId}'),
               ],
-            ),
-          ),
-        ),
+            )),
       ),
     );
   }
+}
+
+detailWidget(String title, String value) {
+  return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+            child: Text(
+          title,
+          textAlign: TextAlign.left,
+        )),
+        Expanded(
+            child: Text(
+          value ?? '',
+          textAlign: TextAlign.right,
+        ))
+      ]);
+}
+
+detailWidgetWithLink(String title, String value) {
+  return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+            child: Text(
+          title,
+          textAlign: TextAlign.left,
+        )),
+        Expanded(
+            child: GestureDetector(
+                onTap: () {
+                  print(value);
+                  launchURL(value);
+                },
+                child: Text(
+                  value ?? '',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.blue),
+                )))
+      ]);
 }

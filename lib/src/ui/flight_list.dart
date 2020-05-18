@@ -40,11 +40,14 @@ class FlightListState extends State<FlightList> {
   }
 
   Widget buildList(AsyncSnapshot<Flights> snapshot) {
-    return ListView.builder(
+    return ListView.separated(
         itemCount: snapshot.data.flights.length,
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return FlightListItem(snapshot.data.flights[index]);
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Container(margin: EdgeInsets.only(top: 1.5));
         });
   }
 }
