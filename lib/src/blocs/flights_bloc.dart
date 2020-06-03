@@ -4,9 +4,9 @@ import 'package:spacex_flights/src/resources/repository.dart';
 
 class FlightsBloc {
   final _repository = Repository();
-  final _flightsFetcher = PublishSubject<Flights>();
+  final _flightsFetcher = ReplaySubject<Flights>();
 
-  Stream<Flights> get allFlights => _flightsFetcher.stream;
+  Stream<Flights> get flights => _flightsFetcher.stream;
 
   fetchAllFlights() async {
     Flights flights = await _repository.fetchAllFlights();

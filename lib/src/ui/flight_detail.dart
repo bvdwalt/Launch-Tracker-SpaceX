@@ -57,10 +57,12 @@ class FlightDetail extends StatelessWidget {
               children: <Widget>[
                 detailWidget(
                     "Launch Date",
-                    DateFormat.yMMMEd()
-                        .add_jm()
-                        .format(flight.launchDateUtc.toLocal())),
+                    DateFormat.yMMMd().format(flight.launchDateUtc.toLocal()) +
+                        ' ' +
+                        DateFormat.Hms()
+                            .format(flight.launchDateUtc.toLocal())),
                 detailWidget("Mission Name", flight.missionName),
+                //detailWidget("Details", flight.details),
                 detailWidget("Launch Site", flight.launchSite.siteNameLong),
                 detailWidget("Flight Number", flight.flightNumber.toString()),
                 detailWidget("Rocket Name", flight.rocket.rocketName),
@@ -73,6 +75,8 @@ class FlightDetail extends StatelessWidget {
                 detailWidgetWithLink(
                     "Reddit Recovery", flight.links.redditRecovery),
                 detailWidgetWithLink(
+                    "Press Kit", flight.links.presskit),
+                detailWidgetWithLink(
                     "YouTube",
                     flight.links.youtubeId == null
                         ? null
@@ -82,7 +86,6 @@ class FlightDetail extends StatelessWidget {
       ),
     );
   }
-  
 }
 
 detailWidget(String title, String value) {

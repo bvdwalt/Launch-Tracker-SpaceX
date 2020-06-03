@@ -10,8 +10,7 @@ class App extends StatelessWidget {
           brightness: Brightness.light, primarySwatch: Colors.lightBlue),
       darkTheme:
           ThemeData(brightness: Brightness.dark, primarySwatch: Colors.blue),
-      home: Scaffold(
-          appBar: AppBar(title: Text('SpaceX Flights')), body: FlightList()),
+      home: FlightList(),
     );
   }
 }

@@ -10,7 +10,7 @@ void main() async {
 
       final flightsBloc = FlightsBloc();
       flightsBloc.fetchAllFlights();
-      flightsBloc.allFlights.listen(expectAsync1((value) {
+      flightsBloc.flights.listen(expectAsync1((value) {
         expect(value, isInstanceOf<Flights>());
       }));
     });

@@ -1,4 +1,3 @@
-
 import 'flight.dart';
 
 class Flights {
@@ -8,11 +7,10 @@ class Flights {
 
   factory Flights.fromJson(List<dynamic> parsedJson) {
     List<Flight> flights = List<Flight>();
-    flights = parsedJson.map((i)=>Flight.fromJson(i)).toList();
 
-    return Flights(
-      flights: flights,
-    );
+    flights = parsedJson.map((i) => Flight.fromJson(i)).toList();
+
+    return Flights(flights: flights);
   }
 
   // Map<String, dynamic> toJson() {

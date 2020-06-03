@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:spacex_flights/EnvironmentConfig.dart';
 import 'package:spacex_flights/service_locator.dart';
 import 'package:spacex_flights/src/resources/repository.dart';
 import 'package:spacex_flights/src/models/flights.dart';
@@ -16,7 +17,7 @@ void main() {
       final _repository = Repository();
       final client = getIt.get<http.Client>();
 
-      when(client.get('https://api.spacexdata.com/v3/launches')).thenAnswer(
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches')).thenAnswer(
           (_) async => http.Response(TestFlightObj.flightJson, 200));
 
       expect(await _repository.fetchAllFlights(), isA<Flights>());
@@ -28,7 +29,7 @@ void main() {
       final _repository = Repository();
       final client = getIt.get<http.Client>();
 
-      when(client.get('https://api.spacexdata.com/v3/launches'))
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches'))
           .thenAnswer((_) async => http.Response('Internal Error', 500));
 
       expect(_repository.fetchAllFlights(), throwsException);
