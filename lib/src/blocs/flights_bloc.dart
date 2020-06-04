@@ -1,20 +1,28 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:spacex_flights/src/models/flights.dart';
+import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/resources/repository.dart';
 
 class FlightsBloc {
   final _repository = Repository();
-  final _flightsFetcher = ReplaySubject<Flights>();
+  final _upcomingFlightsFetcher = ReplaySubject<List<Flight>>();
+  final _pastFlightsFetcher = ReplaySubject<List<Flight>>();
 
-  Stream<Flights> get flights => _flightsFetcher.stream;
+  Stream<List<Flight>> get upcomingFlights => _upcomingFlightsFetcher.stream;
+  Stream<List<Flight>> get pastFlights => _pastFlightsFetcher.stream;
 
-  fetchAllFlights() async {
-    Flights flights = await _repository.fetchAllFlights();
-    _flightsFetcher.sink.add(flights);
+  fetchUpcomingFlights() async {
+    List<Flight> flights = await _repository.fetchUpcomingFlights();
+    _upcomingFlightsFetcher.sink.add(flights);
+  }
+
+  fetchPastFlights() async {
+    List<Flight> flights = await _repository.fetchPastFlights();
+    _pastFlightsFetcher.sink.add(flights);
   }
 
   dispose() {
-    _flightsFetcher.close();
+    _upcomingFlightsFetcher.close();
+    _pastFlightsFetcher.close();
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spacex_flights/src/blocs/flights_bloc.dart';
 import 'package:spacex_flights/src/models/flight.dart';
-import 'package:spacex_flights/src/models/flights.dart';
 import 'flight_list_item.dart';
 
 class FlightList extends StatefulWidget {
@@ -19,11 +18,13 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
 
     _tabController = TabController(vsync: this, initialIndex: 0, length: 2);
 
-    bloc.fetchAllFlights();
+    bloc.fetchUpcomingFlights();
+    bloc.fetchPastFlights();
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     bloc.dispose();
     super.dispose();
   }
@@ -43,8 +44,8 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
       ),
       body: TabBarView(controller: _tabController, children: <Widget>[
         StreamBuilder(
-          stream: bloc.flights,
-          builder: (context, AsyncSnapshot<Flights> snapshot) {
+          stream: bloc.upcomingFlights,
+          builder: (context, AsyncSnapshot<List<Flight>> snapshot) {
             if (snapshot.hasData) {
               return buildList(snapshot, true);
             } else if (snapshot.hasError) {
@@ -54,8 +55,8 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
           },
         ),
         StreamBuilder(
-          stream: bloc.flights,
-          builder: (context, AsyncSnapshot<Flights> snapshot) {
+          stream: bloc.pastFlights,
+          builder: (context, AsyncSnapshot<List<Flight>> snapshot) {
             if (snapshot.hasData) {
               return buildList(snapshot, false);
             } else if (snapshot.hasError) {
@@ -68,30 +69,15 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildList(AsyncSnapshot<Flights> snapshot, bool upcoming) {
-    final List<Flight> flights =
-        getUpcomingOrPastFlights(snapshot.data, upcoming);
+  Widget buildList(AsyncSnapshot<List<Flight>> snapshot, bool upcoming) {
     return ListView.separated(
-        itemCount: flights.length,
+        itemCount: snapshot.data.length,
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return FlightListItem(flights[index]);
+          return FlightListItem(snapshot.data[index]);
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(margin: EdgeInsets.only(top: 1.5));
         });
-  }
-
-  List<Flight> getUpcomingOrPastFlights(Flights flights, bool upcoming) {
-    if (upcoming) {
-      flights.flights
-          .sort((a, b) => a.launchDateUtc.compareTo(b.launchDateUtc));
-      return flights.flights.where((element) => element.upcoming).toList();
-    } else {
-      flights.flights.sort((a, b) => b.launchDateUtc.compareTo(a.launchDateUtc));
-      return flights.flights
-          .where((element) => element.upcoming == false)
-          .toList();
-    }
   }
 }

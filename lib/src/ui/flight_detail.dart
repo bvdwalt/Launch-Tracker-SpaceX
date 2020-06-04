@@ -9,6 +9,7 @@ class FlightDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Flight flight = ModalRoute.of(context).settings.arguments;
+    //final NumberFormat _numberFormat = new NumberFormat("###,###.##");
 
     return Scaffold(
       body: SafeArea(
@@ -55,18 +56,156 @@ class FlightDetail extends StatelessWidget {
               childAspectRatio: 10,
               padding: EdgeInsets.only(left: 20, right: 20),
               children: <Widget>[
+                detailWidget("Flight Number", flight.flightNumber.toString()),
+                detailWidget("Mission Name", flight.missionName),
+                detailWidget("Launch Site", flight.launchSite.siteNameLong),
+                detailWidget(
+                    "Launch Success",
+                    flight.launchSuccess == null
+                        ? ""
+                        : flight.launchSuccess ? "Yes" : "No"),
+                detailWidget(
+                    "Launch Failure Reason",
+                    flight.launchSuccess == null || flight.launchSuccess == true
+                        ? ""
+                        : "${flight.launchFailureDetail.reason}"),
+                detailWidget(
+                    "Launch Tentative", flight.isTentative ? "Yes" : "No"),
+                detailWidget("To Be Determined", flight.tbd ? "Yes" : "No"),
                 detailWidget(
                     "Launch Date",
                     DateFormat.yMMMd().format(flight.launchDateUtc.toLocal()) +
                         ' ' +
                         DateFormat.Hms()
                             .format(flight.launchDateUtc.toLocal())),
-                detailWidget("Mission Name", flight.missionName),
-                //detailWidget("Details", flight.details),
-                detailWidget("Launch Site", flight.launchSite.siteNameLong),
-                detailWidget("Flight Number", flight.flightNumber.toString()),
                 detailWidget("Rocket Name", flight.rocket.rocketName),
-                detailWidget("Rocket Type", flight.rocket.rocketType),
+                detailWidget(
+                    "First Stage Block",
+                    flight.rocket.firstStage.cores.length == 0 ||
+                            flight.rocket.firstStage.cores[0].block == null
+                        ? ""
+                        : flight.rocket.firstStage.cores[0].block.toString()),
+                detailWidget(
+                    "First Stage Serial",
+                    flight.rocket.firstStage.cores.length == 0 ||
+                            flight.rocket.firstStage.cores[0].block == null
+                        ? ""
+                        : flight.rocket.firstStage.cores[0].coreSerial),
+                detailWidget(
+                    "First Stage Reused",
+                    flight.rocket.firstStage.cores.length == 0 ||
+                            flight.rocket.firstStage.cores[0].reused == null
+                        ? ""
+                        : flight.rocket.firstStage.cores[0].reused
+                            ? "Yes ${flight.rocket.firstStage.cores[0].flight != null ? "(" + flight.rocket.firstStage.cores[0].flight.toString() + " times)" : ""}"
+                            : "No"),
+                detailWidget(
+                    "First Stage Landing Intent",
+                    flight.rocket.firstStage.cores.length == 0 ||
+                            flight.rocket.firstStage.cores[0].landingIntent ==
+                                null
+                        ? ""
+                        : flight.rocket.firstStage.cores[0].landingIntent
+                            ? "Yes"
+                            : "No" ?? ""),
+                detailWidget(
+                    "First Stage Landing Success",
+                    flight.rocket.firstStage.cores.length == 0 ||
+                            flight.rocket.firstStage.cores[0].landSuccess ==
+                                null
+                        ? ""
+                        : flight.rocket.firstStage.cores[0].landSuccess
+                            ? "Yes"
+                            : "No" ?? ""),
+                detailWidget(
+                    "Second Stage Block",
+                    flight.rocket.firstStage.cores.length == 0 ||
+                            flight.rocket.secondStage.block == null
+                        ? ""
+                        : flight.rocket.secondStage.block.toString()),
+                detailWidget(
+                    "Payload Orbit",
+                    flight.rocket.secondStage.payloads
+                                .map((e) => e.orbit)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .map((e) => e.orbit)
+                            .join(',')),
+                detailWidget(
+                    "Payload NORAD IDs",
+                    flight.rocket.secondStage.payloads
+                                .where((element) => element.noradId.length != 0)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .where((element) => element.noradId.length != 0)
+                            .map((e) => e.noradId)
+                            .join(',')
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')),
+                detailWidget(
+                    "Payload Customers",
+                    flight.rocket.secondStage.payloads
+                                .map((e) => e.customers)
+                                .where((element) => element.length != 0)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .where((element) => element.customers.length != 0)
+                            .map((e) => e.customers)
+                            .join(',')
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')),
+                detailWidget(
+                    "Payload Nationality",
+                    flight.rocket.secondStage.payloads
+                                .map((e) => e.nationality)
+                                .where((element) => element != null)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .where((element) => element.nationality != null)
+                            .map((e) => e.nationality)
+                            .join(',')),
+                detailWidget(
+                    "Payload Manufacturer",
+                    flight.rocket.secondStage.payloads
+                                .map((e) => e.manufacturer)
+                                .where((element) => element != null)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .where((element) => element.manufacturer != null)
+                            .map((e) => e.manufacturer)
+                            .join(',')),
+                detailWidget(
+                    "Payload Type",
+                    flight.rocket.secondStage.payloads
+                                .map((e) => e.payloadType)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .map((e) => e.payloadType)
+                            .join(',')),
+                detailWidget(
+                    "Payload Mass (kg)",
+                    flight.rocket.secondStage.payloads
+                                .map((e) => e.payloadMassKg)
+                                .where((element) => element != null)
+                                .length ==
+                            0
+                        ? ""
+                        : flight.rocket.secondStage.payloads
+                            .where((element) => element.payloadMassKg != null)
+                            .map((e) => e.payloadMassKg.toString())
+                            .join(',')),
                 detailWidgetWithLink("Wikipedia Link", flight.links.wikipedia),
                 detailWidgetWithLink(
                     "Reddit Campaign", flight.links.redditCampaign),
@@ -74,8 +213,7 @@ class FlightDetail extends StatelessWidget {
                     "Reddit Launch", flight.links.redditLaunch),
                 detailWidgetWithLink(
                     "Reddit Recovery", flight.links.redditRecovery),
-                detailWidgetWithLink(
-                    "Press Kit", flight.links.presskit),
+                detailWidgetWithLink("Press Kit", flight.links.presskit),
                 detailWidgetWithLink(
                     "YouTube",
                     flight.links.youtubeId == null
@@ -103,6 +241,7 @@ detailWidget(String title, String value) {
             child: AutoSizeText(
           value ?? '',
           textAlign: TextAlign.right,
+          overflow: TextOverflow.fade,
           maxLines: 2,
         ))
       ]);
