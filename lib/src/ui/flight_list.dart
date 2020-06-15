@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:spacex_flights/src/blocs/flights_bloc.dart';
 import 'package:spacex_flights/src/models/flight.dart';
+import 'package:spacex_flights/src/resources/api_response.dart';
+import 'package:spacex_flights/src/ui/common/loading_widget.dart';
+import 'package:spacex_flights/src/ui/common/error_widget.dart';
 import 'flight_list_item.dart';
 
 class FlightList extends StatefulWidget {
@@ -45,36 +48,64 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
       body: TabBarView(controller: _tabController, children: <Widget>[
         StreamBuilder(
           stream: bloc.upcomingFlights,
-          builder: (context, AsyncSnapshot<List<Flight>> snapshot) {
+          builder:
+              (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
             if (snapshot.hasData) {
-              return buildList(snapshot, true);
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
+              switch (snapshot.data.status) {
+                case Status.LOADING:
+                  return LoadingWidget(loadingMessage: snapshot.data.message);
+                  break;
+                case Status.COMPLETED:
+                  return RefreshIndicator(
+                      onRefresh: () => bloc.fetchUpcomingFlights(),
+                      child: buildList(snapshot.data.data));
+                  break;
+                case Status.ERROR:
+                  return MyErrorWidget(
+                    errorMessage: snapshot.data.message,
+                    onRetryPressed: () => bloc.fetchUpcomingFlights(),
+                  );
+                  break;
+              }
             }
-            return Center(child: CircularProgressIndicator());
+            return Container();
           },
         ),
         StreamBuilder(
           stream: bloc.pastFlights,
-          builder: (context, AsyncSnapshot<List<Flight>> snapshot) {
+          builder:
+              (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
             if (snapshot.hasData) {
-              return buildList(snapshot, false);
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
+              switch (snapshot.data.status) {
+                case Status.LOADING:
+                  return LoadingWidget(loadingMessage: snapshot.data.message);
+                  break;
+                case Status.COMPLETED:
+                  return RefreshIndicator(
+                      onRefresh: () => bloc.fetchPastFlights(),
+                      child: buildList(snapshot.data.data));
+                  break;
+                case Status.ERROR:
+                  return MyErrorWidget(
+                    errorMessage: snapshot.data.message,
+                    onRetryPressed: () => bloc.fetchPastFlights(),
+                  );
+                  break;
+              }
             }
-            return Center(child: CircularProgressIndicator());
+            return Container();
           },
         ),
       ]),
     );
   }
 
-  Widget buildList(AsyncSnapshot<List<Flight>> snapshot, bool upcoming) {
+  Widget buildList(List<Flight> data) {
     return ListView.separated(
-        itemCount: snapshot.data.length,
+        itemCount: data.length,
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return FlightListItem(snapshot.data[index]);
+          return FlightListItem(data[index]);
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(margin: EdgeInsets.only(top: 1.5));

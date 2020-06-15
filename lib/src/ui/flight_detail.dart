@@ -51,8 +51,10 @@ class FlightDetail extends StatelessWidget {
                   loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
+                    var theme = Theme.of(context);
                     return Center(
                       child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(theme.primaryColor),
                         value: loadingProgress.expectedTotalBytes != null
                             ? loadingProgress.cumulativeBytesLoaded /
                                 loadingProgress.expectedTotalBytes
@@ -64,67 +66,15 @@ class FlightDetail extends StatelessWidget {
         ));
   }
 
-  detailWidget(String title, String value) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-              child: Text(
-            title,
-            textAlign: TextAlign.left,
-          )),
-          Expanded(
-              child: AutoSizeText(
-            value ?? '',
-            textAlign: TextAlign.right,
-            overflow: TextOverflow.fade,
-            maxLines: 2,
-          ))
-        ]);
-  }
-
-  detailWidgetWithLink(String title, String value, BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-              child: Text(
-            title,
-            textAlign: TextAlign.left,
-          )),
-          Expanded(
-              child: GestureDetector(
-                  onLongPress: () {
-                    Clipboard.setData(new ClipboardData(text: value));
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text('Copied link: \n${value}')));
-                  },
-                  onTap: () {
-                    print(value);
-                    launchURL(value);
-                  },
-                  child: AutoSizeText(
-                    value ?? '',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.blue),
-                    maxLines: 2,
-                  )))
-        ]);
-  }
-
   List<Widget> getAllFlightDetailWidgets(
       Flight flight, BuildContext _buildContext) {
     return <Widget>[
       detailWidget("Flight Number", flight.flightNumber.toString()),
       detailWidget("Mission Name", flight.missionName),
       detailWidget("Launch Site", flight.launchSite.siteNameLong),
-      detailWidget("Launch Details", flight.details),
+      detailWidgetTapForMore("Launch Details", flight.details, _buildContext),
       detailWidget(
-          "Launch Success",
+          "Launch Successful",
           flight.launchSuccess == null
               ? ""
               : flight.launchSuccess ? "Yes" : "No"),
@@ -170,7 +120,7 @@ class FlightDetail extends StatelessWidget {
                   ? "Yes"
                   : "No" ?? ""),
       detailWidget(
-          "First Stage Landing Success",
+          "First Stage Landing Successful",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.firstStage.cores[0].landSuccess == null
               ? ""
@@ -277,5 +227,89 @@ class FlightDetail extends StatelessWidget {
               : 'https://www.youtube.com/watch?v=${flight.links.youtubeId}',
           _buildContext),
     ];
+  }
+
+  detailWidget(String title, String value) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+              child: Text(
+            title,
+            textAlign: TextAlign.left,
+          )),
+          Expanded(
+              child: AutoSizeText(
+            value ?? '',
+            textAlign: TextAlign.right,
+            maxLines: 2,
+          ))
+        ]);
+  }
+
+  detailWidgetTapForMore(String title, String value, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+            child: Text(
+          title,
+          textAlign: TextAlign.left,
+        )),
+        Expanded(
+          flex: 1,
+          child: FlatButton(
+            child: Text('Show'),
+            materialTapTargetSize: MaterialTapTargetSize.padded,
+            onPressed: () => showTextDialog(title, value, context),
+          ),
+        ),
+      ],
+    );
+  }
+
+  detailWidgetWithLink(String title, String value, BuildContext context) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+              child: Text(
+            title,
+            textAlign: TextAlign.left,
+          )),
+          Expanded(
+              child: GestureDetector(
+                  onLongPress: () {
+                    Clipboard.setData(new ClipboardData(text: value));
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text('Copied link: \n${value}')));
+                  },
+                  onTap: () {
+                    launchURL(value);
+                  },
+                  child: AutoSizeText(value ?? '',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(color: Colors.blue),
+                      maxLines: 2)))
+        ]);
+  }
+
+  showTextDialog(String title, String value, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: <Widget>[SingleChildScrollView(child: Text(value))],
+            contentPadding: EdgeInsets.all(15),
+            semanticLabel: title,
+            title: Text(title),
+          );
+        });
   }
 }

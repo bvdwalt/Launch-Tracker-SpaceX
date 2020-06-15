@@ -19,8 +19,8 @@ void main() {
       final client = getIt.get<http.Client>();
 
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-          .thenAnswer(
-              (_) async => http.Response(TestUpcomingFlightObj.flightJson, 200));
+          .thenAnswer((_) async =>
+              http.Response(TestUpcomingFlightObj.flightJson, 200));
 
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
           .thenAnswer(
@@ -33,23 +33,32 @@ void main() {
       expect(find.text('110'), findsOneWidget);
       expect(find.text('ANASIS-II'), findsOneWidget);
 
+      //find flight number 110 and tap the item to bring up the detail screen
       await tester.tap(find.byType(FlightListItem).first);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(GestureDetector).first);
+      //Find the linkWidget and test that it can tapped and long pressed
+      var linkWidget = find.byType(GestureDetector).first;
+      await tester.longPress(linkWidget);
+      await tester.pump();
+      await tester.tap(linkWidget);
       await tester.pump();
 
+      //navigate back to the list page
       await tester.pageBack();
       await tester.pumpAndSettle();
 
+      //select the last tab (2), for Past flights
       await tester.tap(find.byType(Tab).last);
       await tester.pumpAndSettle();
 
+      //Find flight number 1 and tap the item to bring up the detail screen
       expect(find.text('1'), findsOneWidget);
       expect(find.text('FalconSat'), findsOneWidget);
 
-      await tester.tap(find.byType(FlightListItem).last);
+
+      await tester.tap(find.byType(FlightListItem).first);
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(GestureDetector).last);
+      await tester.tap(find.byType(GestureDetector).first);
       await tester.pump();
     });
   });
