@@ -8,9 +8,10 @@ void main() async {
     test("Flights BLoC testing", () async {
       registerServices(testing: true);
 
-      final flightsBloc = FlightsBloc();
+      final flightsBloc = getIt.get<FlightsBloc>();
       flightsBloc.fetchUpcomingFlights();
       flightsBloc.upcomingFlights.listen(expectAsync1((value) {
+        print(value.toString());
         expect(value, isInstanceOf<List<Flight>>());
       }));
 

@@ -18,13 +18,15 @@ void main() {
       final _repository = Repository();
       final client = getIt.get<http.Client>();
 
-      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming')).thenAnswer(
-          (_) async => http.Response(TestUpcomingFlightObj.flightJson, 200));
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
+          .thenAnswer((_) async =>
+              http.Response(TestUpcomingFlightObj.flightJson, 200));
 
       expect(await _repository.fetchUpcomingFlights(), isA<List<Flight>>());
 
-      when(client.get('${EnvironmentConfig.BASE_URL}/launches/past')).thenAnswer(
-          (_) async => http.Response(TestPastFlightObj.flightJson, 200));
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
+          .thenAnswer(
+              (_) async => http.Response(TestPastFlightObj.flightJson, 200));
 
       expect(await _repository.fetchPastFlights(), isA<List<Flight>>());
     });
@@ -43,6 +45,14 @@ void main() {
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
           .thenAnswer((_) async => http.Response('Internal Error', 500));
 
+      expect(_repository.fetchPastFlights(), throwsException);
+
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
+          .thenAnswer((_) async => http.Response('Internal Error', 400));
+      expect(_repository.fetchPastFlights(), throwsException);
+
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
+          .thenAnswer((_) async => http.Response('Internal Error', 401));
       expect(_repository.fetchPastFlights(), throwsException);
     });
   });
