@@ -41,5 +41,3 @@ class FlightsBloc {
     _pastFlightsFetcher.close();
   }
 }
-
-final bloc = FlightsBloc();

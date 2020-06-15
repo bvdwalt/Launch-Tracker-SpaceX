@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spacex_flights/service_locator.dart';
 import 'package:spacex_flights/src/blocs/flights_bloc.dart';
 import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/resources/api_response.dart';
@@ -15,6 +16,7 @@ class FlightList extends StatefulWidget {
 
 class FlightListState extends State<FlightList> with TickerProviderStateMixin {
   TabController _tabController;
+  FlightsBloc bloc = getIt.get<FlightsBloc>();
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
-    bloc.dispose();
+    getIt.unregister<FlightsBloc>();
     super.dispose();
   }
 
