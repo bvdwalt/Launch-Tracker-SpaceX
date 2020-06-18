@@ -262,10 +262,14 @@ class FlightDetail extends StatelessWidget {
         )),
         Expanded(
           flex: 1,
-          child: FlatButton(
-            child: Text('Show'),
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-            onPressed: () => showTextDialog(title, value, context),
+          child: GestureDetector(
+            child: AutoSizeText(
+              value ?? '',
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.fade,
+              maxLines: 2,
+            ),
+            onTap: () => showTextDialog(title, value, context),
           ),
         ),
       ],
@@ -305,7 +309,13 @@ class FlightDetail extends StatelessWidget {
         context: context,
         builder: (context) {
           return SimpleDialog(
-            children: <Widget>[SingleChildScrollView(child: Text(value))],
+            children: <Widget>[
+              SingleChildScrollView(
+                  child: Text(
+                value,
+                style: TextStyle(fontSize: 18),
+              ))
+            ],
             contentPadding: EdgeInsets.all(15),
             semanticLabel: title,
             title: Text(title),
