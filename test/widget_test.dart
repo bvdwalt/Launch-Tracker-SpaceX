@@ -67,8 +67,6 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.byType(GestureDetector).first);
         await tester.pump();
-
-        await tester.tap(find.byType(FlatButton));
       });
     });
 

@@ -20,9 +20,9 @@ class _FlightListItemState extends State<FlightListItem> {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.flight.missionName,
+          Text(widget.flight.missionName ?? '',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Text(widget.flight.flightNumber.toString())
+          Text(widget.flight.flightNumber.toString() ?? '')
         ],
       ),
     );
@@ -36,7 +36,7 @@ class _FlightListItemState extends State<FlightListItem> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Text(
-            widget.flight.launchSite.siteName,
+            widget.flight.launchSite.siteName ?? '',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
           DateTimeTextWidget(
@@ -57,7 +57,7 @@ class _FlightListItemState extends State<FlightListItem> {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.flight.rocket.rocketName, style: TextStyle(fontSize: 12)),
+          Text(widget.flight.rocket.rocketName ?? '', style: TextStyle(fontSize: 12)),
         ],
       ),
     );

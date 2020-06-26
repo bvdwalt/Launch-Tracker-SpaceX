@@ -37,33 +37,34 @@ class FlightDetail extends StatelessWidget {
 
   SliverAppBar buildSliverAppBar(Flight flight) {
     return SliverAppBar(
-        expandedHeight: 200.0,
-        floating: false,
-        pinned: true,
-        elevation: 0.0,
-        flexibleSpace: FlexibleSpaceBar(
-          centerTitle: true,
-          background: flight.links.missionPatchSmall == null
-              ? Center(child: Text("No Image yet"))
-              : Image.network(
-                  flight.links.missionPatchSmall,
-                  fit: BoxFit.scaleDown,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    var theme = Theme.of(context);
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(theme.primaryColor),
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-        ));
+      expandedHeight: 200.0,
+      floating: false,
+      pinned: true,
+      elevation: 0.0,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        background: flight.links.missionPatchSmall == null
+            ? Center(child: Text("No Image yet"))
+            : Image.network(
+                flight.links.missionPatchSmall,
+                fit: BoxFit.scaleDown,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  var theme = Theme.of(context);
+                  return Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(theme.primaryColor),
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes
+                          : null,
+                    ),
+                  );
+                },
+              ),
+      ),
+    );
   }
 
   List<Widget> getAllFlightDetailWidgets(
@@ -71,7 +72,7 @@ class FlightDetail extends StatelessWidget {
     return <Widget>[
       detailWidget("Flight Number", flight.flightNumber.toString()),
       detailWidget("Mission Name", flight.missionName),
-      detailWidget("Launch Site", flight.launchSite.siteNameLong),
+      detailWidget("Launch Site", flight.launchSite.siteNameLong ?? ''),
       detailWidgetTapForMore("Launch Details", flight.details, _buildContext),
       detailWidget(
           "Launch Successful",
