@@ -58,6 +58,7 @@ class _FlightListItemState extends State<FlightListItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(widget.flight.rocket.rocketName ?? '', style: TextStyle(fontSize: 12)),
+          Text(widget.flight.rocket.secondStage.payloads.map((e) => e.orbit.toString()).toSet().join(', ')),
         ],
       ),
     );

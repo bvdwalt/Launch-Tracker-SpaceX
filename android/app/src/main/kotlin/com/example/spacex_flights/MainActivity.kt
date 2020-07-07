@@ -1,4 +1,4 @@
-package com.example.spacex_flights
+package com.bvdwalt.spacex_flights
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

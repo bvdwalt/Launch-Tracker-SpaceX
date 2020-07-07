@@ -140,6 +140,7 @@ class FlightDetail extends StatelessWidget {
               ? ""
               : flight.rocket.secondStage.payloads
                   .map((e) => e.orbit)
+                  .toSet()
                   .join(',')),
       detailWidget(
           "Payload NORAD IDs",
@@ -151,6 +152,7 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.secondStage.payloads
                   .where((element) => element.noradId.length != 0)
                   .map((e) => e.noradId)
+                  .toSet()
                   .join(',')
                   .replaceAll('[', '')
                   .replaceAll(']', '')),
@@ -165,6 +167,7 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.secondStage.payloads
                   .where((element) => element.customers.length != 0)
                   .map((e) => e.customers)
+                  .toSet()
                   .join(',')
                   .replaceAll('[', '')
                   .replaceAll(']', '')),
@@ -179,6 +182,7 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.secondStage.payloads
                   .where((element) => element.nationality != null)
                   .map((e) => e.nationality)
+                  .toSet()
                   .join(',')),
       detailWidget(
           "Payload Manufacturer",
@@ -191,6 +195,7 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.secondStage.payloads
                   .where((element) => element.manufacturer != null)
                   .map((e) => e.manufacturer)
+                  .toSet()
                   .join(',')),
       detailWidget(
           "Payload Type",
@@ -199,6 +204,7 @@ class FlightDetail extends StatelessWidget {
               ? ""
               : flight.rocket.secondStage.payloads
                   .map((e) => e.payloadType)
+                  .toSet()
                   .join(',')),
       detailWidget(
           "Payload Mass (kg)",

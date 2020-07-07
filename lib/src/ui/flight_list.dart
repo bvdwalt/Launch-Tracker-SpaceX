@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spacex_flights/EnvironmentConfig.dart';
 import 'package:spacex_flights/service_locator.dart';
 import 'package:spacex_flights/src/blocs/flights_bloc.dart';
 import 'package:spacex_flights/src/models/flight.dart';
@@ -6,6 +7,8 @@ import 'package:spacex_flights/src/resources/api_response.dart';
 import 'package:spacex_flights/src/ui/common/loading_widget.dart';
 import 'package:spacex_flights/src/ui/common/error_widget.dart';
 import 'flight_list_item.dart';
+import 'package:ads/ads.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 class FlightList extends StatefulWidget {
   @override
@@ -17,11 +20,28 @@ class FlightList extends StatefulWidget {
 class FlightListState extends State<FlightList> with TickerProviderStateMixin {
   TabController _tabController;
   FlightsBloc bloc = getIt.get<FlightsBloc>();
+  Ads appAds;
   @override
   void initState() {
     super.initState();
 
     _tabController = TabController(vsync: this, initialIndex: 0, length: 2);
+
+    // Assign a listener.
+    var eventListener = (MobileAdEvent event) {
+      if (event == MobileAdEvent.opened) {
+        print("eventListener: The opened ad is clicked on.");
+      }
+    };
+
+    appAds = Ads(
+      EnvironmentConfig.Ad_Mob_App_ID,
+      bannerUnitId: EnvironmentConfig.Ad_Mob_Banner_ID,
+      keywords: ['spacex', 'space', 'technology', 'rocket', 'launch'],
+      listener: eventListener,
+    );
+
+    appAds.showBannerAd();
 
     bloc.fetchUpcomingFlights();
     bloc.fetchPastFlights();
@@ -30,6 +50,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
+    appAds.dispose();
     getIt.unregister<FlightsBloc>();
     super.dispose();
   }
@@ -47,58 +68,61 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
           ],
         ),
       ),
-      body: TabBarView(controller: _tabController, children: <Widget>[
-        StreamBuilder(
-          stream: bloc.upcomingFlights,
-          builder:
-              (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
-            if (snapshot.hasData) {
-              switch (snapshot.data.status) {
-                case Status.LOADING:
-                  return LoadingWidget(loadingMessage: snapshot.data.message);
-                  break;
-                case Status.COMPLETED:
-                  return RefreshIndicator(
-                      onRefresh: () => bloc.fetchUpcomingFlights(),
-                      child: buildList(snapshot.data.data));
-                  break;
-                case Status.ERROR:
-                  return MyErrorWidget(
-                    errorMessage: snapshot.data.message,
-                    onRetryPressed: () => bloc.fetchUpcomingFlights(),
-                  );
-                  break;
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          StreamBuilder(
+            stream: bloc.upcomingFlights,
+            builder:
+                (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
+              if (snapshot.hasData) {
+                switch (snapshot.data.status) {
+                  case Status.LOADING:
+                    return LoadingWidget(loadingMessage: snapshot.data.message);
+                    break;
+                  case Status.COMPLETED:
+                    return RefreshIndicator(
+                        onRefresh: () => bloc.fetchUpcomingFlights(),
+                        child: buildList(snapshot.data.data));
+                    break;
+                  case Status.ERROR:
+                    return MyErrorWidget(
+                      errorMessage: snapshot.data.message,
+                      onRetryPressed: () => bloc.fetchUpcomingFlights(),
+                    );
+                    break;
+                }
               }
-            }
-            return Container();
-          },
-        ),
-        StreamBuilder(
-          stream: bloc.pastFlights,
-          builder:
-              (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
-            if (snapshot.hasData) {
-              switch (snapshot.data.status) {
-                case Status.LOADING:
-                  return LoadingWidget(loadingMessage: snapshot.data.message);
-                  break;
-                case Status.COMPLETED:
-                  return RefreshIndicator(
-                      onRefresh: () => bloc.fetchPastFlights(),
-                      child: buildList(snapshot.data.data));
-                  break;
-                case Status.ERROR:
-                  return MyErrorWidget(
-                    errorMessage: snapshot.data.message,
-                    onRetryPressed: () => bloc.fetchPastFlights(),
-                  );
-                  break;
+              return Container();
+            },
+          ),
+          StreamBuilder(
+            stream: bloc.pastFlights,
+            builder:
+                (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
+              if (snapshot.hasData) {
+                switch (snapshot.data.status) {
+                  case Status.LOADING:
+                    return LoadingWidget(loadingMessage: snapshot.data.message);
+                    break;
+                  case Status.COMPLETED:
+                    return RefreshIndicator(
+                        onRefresh: () => bloc.fetchPastFlights(),
+                        child: buildList(snapshot.data.data));
+                    break;
+                  case Status.ERROR:
+                    return MyErrorWidget(
+                      errorMessage: snapshot.data.message,
+                      onRetryPressed: () => bloc.fetchPastFlights(),
+                    );
+                    break;
+                }
               }
-            }
-            return Container();
-          },
-        ),
-      ]),
+              return Container();
+            },
+          ),
+        ],
+      ),
     );
   }
 
