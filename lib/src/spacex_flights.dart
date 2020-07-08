@@ -1,7 +1,8 @@
+import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:spacex_flights/src/ui/flight_list.dart';
 
-class App extends StatelessWidget {
+class SpaceXFlights extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MaterialColor myColor = MaterialColor(0xFF0033CC, {
@@ -21,6 +22,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: ThemeData(brightness: Brightness.light, primarySwatch: myColor),
       darkTheme: ThemeData(brightness: Brightness.dark, primarySwatch: myColor),
+      navigatorKey: Catcher.navigatorKey,
       home: FlightList(),
     );
   }

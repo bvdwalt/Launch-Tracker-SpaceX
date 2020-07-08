@@ -10,12 +10,12 @@ void main() async {
 
       final flightsBloc = getIt.get<FlightsBloc>();
       flightsBloc.fetchUpcomingFlights();
+      flightsBloc.fetchPastFlights();
+
       flightsBloc.upcomingFlights.listen(expectAsync1((value) {
-        print(value.toString());
         expect(value, isInstanceOf<List<Flight>>());
       }));
 
-      flightsBloc.fetchPastFlights();
       flightsBloc.pastFlights.listen(expectAsync1((value) {
         expect(value, isInstanceOf<List<Flight>>());
       }));

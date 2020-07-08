@@ -40,20 +40,11 @@ void main() {
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
           .thenAnswer((_) async => http.Response('Internal Error', 500));
 
-      expect(_repository.fetchUpcomingFlights(), throwsException);
-
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
           .thenAnswer((_) async => http.Response('Internal Error', 500));
 
-      expect(_repository.fetchPastFlights(), throwsException);
-
-      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-          .thenAnswer((_) async => http.Response('Internal Error', 400));
-      expect(_repository.fetchPastFlights(), throwsException);
-
-      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-          .thenAnswer((_) async => http.Response('Internal Error', 401));
-      expect(_repository.fetchPastFlights(), throwsException);
+      expect(() async => await _repository.fetchUpcomingFlights(), throwsException);
+      expect(() async => await _repository.fetchPastFlights(), throwsException);
     });
   });
 }

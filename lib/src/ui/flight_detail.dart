@@ -17,19 +17,20 @@ class FlightDetail extends StatelessWidget {
           top: false,
           bottom: false,
           child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  buildSliverAppBar(flight),
-                ];
-              },
-              body: GridView.count(
-                physics: BouncingScrollPhysics(),
-                crossAxisCount: 1,
-                childAspectRatio: 10,
-                padding: EdgeInsets.only(left: 20, right: 20),
-                children: getAllFlightDetailWidgets(flight, builderContent),
-              )),
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                buildSliverAppBar(flight),
+              ];
+            },
+            body: GridView.count(
+              physics: BouncingScrollPhysics(),
+              crossAxisCount: 1,
+              childAspectRatio: 10,
+              padding: EdgeInsets.only(left: 20, right: 20),
+              children: getAllFlightDetailWidgets(flight, builderContent),
+            ),
+          ),
         ),
       ),
     );
