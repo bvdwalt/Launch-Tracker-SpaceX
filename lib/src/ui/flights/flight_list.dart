@@ -6,6 +6,7 @@ import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/resources/api_response.dart';
 import 'package:spacex_flights/src/ui/common/loading_widget.dart';
 import 'package:spacex_flights/src/ui/common/error_widget.dart';
+import 'package:spacex_flights/src/ui/common/settings_screen.dart';
 import 'flight_list_item.dart';
 import 'package:ads/ads.dart';
 import 'package:firebase_admob/firebase_admob.dart';
@@ -60,12 +61,23 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: Text('SpaceX Flights'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SettingsScreen();
+                },
+              ),
+            ),
+          )
+        ],
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
-            Tab(text: 'Upcoming'),
-            Tab(text: 'Past'),
-          ],
+          indicatorColor: Theme.of(context).selectedRowColor,
+          tabs: [Tab(text: 'Upcoming'), Tab(text: 'Past')],
         ),
       ),
       body: TabBarView(

@@ -21,7 +21,7 @@ class FlightsBloc {
       _upcomingFlightsFetcher.add(ApiResponse.completed(flights));
     } catch (e) {
       _upcomingFlightsFetcher.add(ApiResponse.error("Unexpected error occurred while fetching flights"));
-      throw e;
+    throw e;
     }
   }
 
@@ -32,7 +32,7 @@ class FlightsBloc {
       _pastFlightsFetcher.add(ApiResponse.completed(flights));
     } catch (e) {
       _pastFlightsFetcher.add(ApiResponse.error("Unexpected error occurred while fetching flights"));
-      throw e;
+    throw e;
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:package_info/package_info.dart';
 import 'package:spacex_flights/src/blocs/flights_bloc.dart';
 import 'package:spacex_flights/src/resources/flight_provider.dart';
 import 'package:http/http.dart';
@@ -11,12 +12,15 @@ final getIt = GetIt.instance;
 
 void registerServices({bool testing = false}) {
   getIt.reset();
+
   getIt.registerLazySingleton(() => FlightProvider());
   getIt.registerLazySingleton(() => FlightsBloc());
-  
-  getIt.registerLazySingleton(() => SentryClient(dsn: EnvironmentConfig.SENTRY_DSN));
+
+  getIt.registerLazySingleton(
+      () => SentryClient(dsn: EnvironmentConfig.SENTRY_DSN));
 
   if (!testing) {
+    getIt.registerSingletonAsync(() async => await PackageInfo.fromPlatform());
     getIt.registerLazySingleton<http.Client>(() => Client());
   } else {
     getIt.registerLazySingleton<http.Client>(() => MockClient());

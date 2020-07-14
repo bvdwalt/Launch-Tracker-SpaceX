@@ -1,14 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spacex_flights/EnvironmentConfig.dart';
 import 'package:spacex_flights/service_locator.dart';
 import 'package:spacex_flights/src/spacex_flights.dart';
-import 'package:spacex_flights/src/ui/common/error_widget.dart';
-import 'package:spacex_flights/src/ui/flight_list_item.dart';
+import 'package:spacex_flights/src/ui/flights/flight_list_item.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import './data/TestUpcomingFlightObj.dart';
 import './data/TestPastFlightObj.dart';
@@ -19,6 +18,8 @@ void main() {
     testWidgets('App loads flight correctly', (WidgetTester tester) async {
       mockNetworkImagesFor(() async {
         registerServices(testing: true);
+        SharedPreferences.setMockInitialValues(
+            {"user_theme_mode": "themeMode.system"});
 
         final client = getIt.get<http.Client>();
 
@@ -71,6 +72,7 @@ void main() {
     });
 
     // testWidgets('App Fails to load flights', (WidgetTester tester) async {
+    //   TestWidgetsFlutterBinding.ensureInitialized();
     //   registerServices(testing: true);
 
     //   final client = getIt.get<http.Client>();
@@ -85,7 +87,7 @@ void main() {
 
     //   await tester.pumpAndSettle(Duration(seconds: 5));
 
-    //   var l = expectLater(find.byType(MyErrorWidget), findsOneWidget);
+    //   expect(() async => await find.byType(MyErrorWidget), findsOneWidget);
     // });
   });
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spacex_flights/src/models/flight.dart';
-import 'package:spacex_flights/src/ui/DateTimeTextWidget.dart';
+import 'package:spacex_flights/src/ui/common/DateTimeTextWidget.dart';
 import 'flight_detail.dart';
 
 class FlightListItem extends StatefulWidget {
@@ -40,11 +40,14 @@ class _FlightListItemState extends State<FlightListItem> {
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
           DateTimeTextWidget(
-              dateTime: widget.flight.launchDateUtc,
-              style: TextStyle(
-                  color: widget.flight.upcoming
-                      ? Colors.orange[300]
-                      : Colors.green[300])),
+            dateTime: widget.flight.launchDateUtc,
+            style: TextStyle(
+                color: widget.flight.upcoming
+                    ? Colors.green[300]
+                    : Colors.orange[300]),
+            tbd: widget.flight.tbd,
+            tentative: widget.flight.isTentative,
+          ),
         ],
       ),
     );
@@ -57,8 +60,12 @@ class _FlightListItemState extends State<FlightListItem> {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.flight.rocket.rocketName ?? '', style: TextStyle(fontSize: 12)),
-          Text(widget.flight.rocket.secondStage.payloads.map((e) => e.orbit.toString()).toSet().join(', ')),
+          Text(widget.flight.rocket.rocketName ?? '',
+              style: TextStyle(fontSize: 12)),
+          Text(widget.flight.rocket.secondStage.payloads
+              .map((e) => e.orbit.toString())
+              .toSet()
+              .join(', ')),
         ],
       ),
     );
@@ -88,12 +95,13 @@ class _FlightListItemState extends State<FlightListItem> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) {
-            return FlightDetail();
-          },
-          settings: RouteSettings(
-            arguments: widget.flight,
-          )),
+        builder: (context) {
+          return FlightDetail();
+        },
+        settings: RouteSettings(
+          arguments: widget.flight,
+        ),
+      ),
     );
   }
 }
