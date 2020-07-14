@@ -29,13 +29,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SizedBox(
         height: 20,
       ),
-      // Text('All dates & times are shown in the devices\' locale'),
       GestureDetector(
         onTap: () {
           launchURL('https://github.com/bvdwalt/spacex_flights');
         },
         child: Text(
           'GitHub Repository',
+          textAlign: TextAlign.left,
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          launchURL('https://www.patreon.com/SpaceXFlights');
+        },
+        child: Text(
+          'Patreon',
           textAlign: TextAlign.left,
           style: TextStyle(color: Colors.blue),
         ),
