@@ -1,10 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:spacex_flights/src/helpers/url_helper.dart';
 import 'package:spacex_flights/src/models/flight.dart';
+import 'package:spacex_flights/src/ui/common/detail_widget_with_link.dart';
+import 'package:spacex_flights/src/ui/common/detail_widget.dart';
+import 'package:spacex_flights/src/ui/common/detail_widget_tap_for_more.dart';
 
 class FlightDetail extends StatelessWidget {
   @override
@@ -17,19 +17,20 @@ class FlightDetail extends StatelessWidget {
           top: false,
           bottom: false,
           child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  buildSliverAppBar(flight),
-                ];
-              },
-              body: GridView.count(
-                physics: BouncingScrollPhysics(),
-                crossAxisCount: 1,
-                childAspectRatio: 10,
-                padding: EdgeInsets.only(left: 20, right: 20),
-                children: getAllFlightDetailWidgets(flight, builderContent),
-              )),
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                buildSliverAppBar(flight),
+              ];
+            },
+            body: GridView.count(
+              physics: BouncingScrollPhysics(),
+              crossAxisCount: 1,
+              childAspectRatio: 10,
+              padding: EdgeInsets.only(left: 20, right: 20),
+              children: getAllFlightDetailWidgets(flight, builderContent),
+            ),
+          ),
         ),
       ),
     );
@@ -37,9 +38,9 @@ class FlightDetail extends StatelessWidget {
 
   SliverAppBar buildSliverAppBar(Flight flight) {
     return SliverAppBar(
-      expandedHeight: 200.0,
-      floating: false,
-      pinned: true,
+      expandedHeight: 150.0,
+      floating: true,
+      pinned: false,
       elevation: 0.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
@@ -70,41 +71,41 @@ class FlightDetail extends StatelessWidget {
   List<Widget> getAllFlightDetailWidgets(
       Flight flight, BuildContext _buildContext) {
     return <Widget>[
-      detailWidget("Flight Number", flight.flightNumber.toString()),
-      detailWidget("Mission Name", flight.missionName),
-      detailWidget("Launch Site", flight.launchSite.siteNameLong ?? ''),
-      detailWidgetTapForMore("Launch Details", flight.details, _buildContext),
-      detailWidget(
+      getDetailWidget("Flight Number", flight.flightNumber.toString()),
+      getDetailWidget("Mission Name", flight.missionName),
+      getDetailWidget("Launch Site", flight.launchSite.siteNameLong ?? ''),
+      getDetailWidgetTapForMore("Launch Details", flight.details, _buildContext),
+      getDetailWidget(
           "Launch Successful",
           flight.launchSuccess == null
               ? ""
               : flight.launchSuccess ? "Yes" : "No"),
-      detailWidget(
+      getDetailWidget(
           "Launch Failure Reason",
           flight.launchSuccess == null || flight.launchSuccess == true
               ? ""
               : "${flight.launchFailureDetail.reason}"),
-      detailWidget("Launch Tentative", flight.isTentative ? "Yes" : "No"),
-      detailWidget("To Be Determined", flight.tbd ? "Yes" : "No"),
-      detailWidget(
+      getDetailWidget("Launch Tentative", flight.isTentative ? "Yes" : "No"),
+      getDetailWidget("To Be Determined", flight.tbd ? "Yes" : "No"),
+      getDetailWidget(
           "Launch Date",
           DateFormat.yMMMd().format(flight.launchDateUtc.toLocal()) +
               ' ' +
               DateFormat.Hms().format(flight.launchDateUtc.toLocal())),
-      detailWidget("Rocket Name", flight.rocket.rocketName),
-      detailWidget(
+      getDetailWidget("Rocket Name", flight.rocket.rocketName),
+      getDetailWidget(
           "First Stage Block",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.firstStage.cores[0].block == null
               ? ""
               : flight.rocket.firstStage.cores[0].block.toString()),
-      detailWidget(
+      getDetailWidget(
           "First Stage Serial",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.firstStage.cores[0].block == null
               ? ""
               : flight.rocket.firstStage.cores[0].coreSerial),
-      detailWidget(
+      getDetailWidget(
           "First Stage Reused",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.firstStage.cores[0].reused == null
@@ -112,7 +113,7 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.firstStage.cores[0].reused
                   ? "Yes ${flight.rocket.firstStage.cores[0].flight != null ? "(" + flight.rocket.firstStage.cores[0].flight.toString() + " times)" : ""}"
                   : "No"),
-      detailWidget(
+      getDetailWidget(
           "First Stage Landing Intent",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.firstStage.cores[0].landingIntent == null
@@ -120,7 +121,7 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.firstStage.cores[0].landingIntent
                   ? "Yes"
                   : "No" ?? ""),
-      detailWidget(
+      getDetailWidget(
           "First Stage Landing Successful",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.firstStage.cores[0].landSuccess == null
@@ -128,13 +129,13 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.firstStage.cores[0].landSuccess
                   ? "Yes"
                   : "No" ?? ""),
-      detailWidget(
+      getDetailWidget(
           "Second Stage Block",
           flight.rocket.firstStage.cores.length == 0 ||
                   flight.rocket.secondStage.block == null
               ? ""
               : flight.rocket.secondStage.block.toString()),
-      detailWidget(
+      getDetailWidget(
           "Payload Orbit",
           flight.rocket.secondStage.payloads.map((e) => e.orbit).length == 0
               ? ""
@@ -142,7 +143,7 @@ class FlightDetail extends StatelessWidget {
                   .map((e) => e.orbit)
                   .toSet()
                   .join(',')),
-      detailWidget(
+      getDetailWidget(
           "Payload NORAD IDs",
           flight.rocket.secondStage.payloads
                       .where((element) => element.noradId.length != 0)
@@ -156,7 +157,7 @@ class FlightDetail extends StatelessWidget {
                   .join(',')
                   .replaceAll('[', '')
                   .replaceAll(']', '')),
-      detailWidget(
+      getDetailWidget(
           "Payload Customers",
           flight.rocket.secondStage.payloads
                       .map((e) => e.customers)
@@ -171,7 +172,7 @@ class FlightDetail extends StatelessWidget {
                   .join(',')
                   .replaceAll('[', '')
                   .replaceAll(']', '')),
-      detailWidget(
+      getDetailWidget(
           "Payload Nationality",
           flight.rocket.secondStage.payloads
                       .map((e) => e.nationality)
@@ -184,7 +185,7 @@ class FlightDetail extends StatelessWidget {
                   .map((e) => e.nationality)
                   .toSet()
                   .join(',')),
-      detailWidget(
+      getDetailWidget(
           "Payload Manufacturer",
           flight.rocket.secondStage.payloads
                       .map((e) => e.manufacturer)
@@ -197,7 +198,7 @@ class FlightDetail extends StatelessWidget {
                   .map((e) => e.manufacturer)
                   .toSet()
                   .join(',')),
-      detailWidget(
+      getDetailWidget(
           "Payload Type",
           flight.rocket.secondStage.payloads.map((e) => e.payloadType).length ==
                   0
@@ -206,7 +207,7 @@ class FlightDetail extends StatelessWidget {
                   .map((e) => e.payloadType)
                   .toSet()
                   .join(',')),
-      detailWidget(
+      getDetailWidget(
           "Payload Mass (kg)",
           flight.rocket.secondStage.payloads
                       .map((e) => e.payloadMassKg)
@@ -218,115 +219,21 @@ class FlightDetail extends StatelessWidget {
                   .where((element) => element.payloadMassKg != null)
                   .map((e) => e.payloadMassKg.toString())
                   .join(',')),
-      detailWidgetWithLink(
+      getDetailWidgetWithLink(
           "Wikipedia Link", flight.links.wikipedia, _buildContext),
-      detailWidgetWithLink(
+      getDetailWidgetWithLink(
           "Reddit Campaign", flight.links.redditCampaign, _buildContext),
-      detailWidgetWithLink(
+      getDetailWidgetWithLink(
           "Reddit Launch", flight.links.redditLaunch, _buildContext),
-      detailWidgetWithLink(
+      getDetailWidgetWithLink(
           "Reddit Recovery", flight.links.redditRecovery, _buildContext),
-      detailWidgetWithLink("Press Kit", flight.links.presskit, _buildContext),
-      detailWidgetWithLink(
+      getDetailWidgetWithLink("Press Kit", flight.links.presskit, _buildContext),
+      getDetailWidgetWithLink(
           "YouTube",
           flight.links.youtubeId == null
               ? null
               : 'https://www.youtube.com/watch?v=${flight.links.youtubeId}',
           _buildContext),
     ];
-  }
-
-  detailWidget(String title, String value) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-              child: Text(
-            title,
-            textAlign: TextAlign.left,
-          )),
-          Expanded(
-              child: AutoSizeText(
-            value ?? '',
-            textAlign: TextAlign.right,
-            maxLines: 2,
-          ))
-        ]);
-  }
-
-  detailWidgetTapForMore(String title, String value, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-            child: Text(
-          title,
-          textAlign: TextAlign.left,
-        )),
-        Expanded(
-          flex: 1,
-          child: GestureDetector(
-            child: AutoSizeText(
-              value ?? '',
-              textAlign: TextAlign.right,
-              overflow: TextOverflow.fade,
-              maxLines: 2,
-            ),
-            onTap: () => showTextDialog(title, value, context),
-          ),
-        ),
-      ],
-    );
-  }
-
-  detailWidgetWithLink(String title, String value, BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-              child: Text(
-            title,
-            textAlign: TextAlign.left,
-          )),
-          Expanded(
-              child: GestureDetector(
-                  onLongPress: () {
-                    Clipboard.setData(new ClipboardData(text: value));
-                    Scaffold.of(context).showSnackBar(
-                        SnackBar(content: Text('Copied link: \n${value}')));
-                  },
-                  onTap: () {
-                    launchURL(value);
-                  },
-                  child: AutoSizeText(value ?? '',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(color: Colors.blue),
-                      maxLines: 2)))
-        ]);
-  }
-
-  showTextDialog(String title, String value, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            children: <Widget>[
-              SingleChildScrollView(
-                  child: Text(
-                value,
-                style: TextStyle(fontSize: 18),
-              ))
-            ],
-            contentPadding: EdgeInsets.all(15),
-            semanticLabel: title,
-            title: Text(title),
-          );
-        });
   }
 }

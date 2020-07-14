@@ -11,7 +11,9 @@ description: SpaceX Flight Data app built in Flutter.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.1+2
+# See APK sizes: flutter build apk --split-per-abi
+# Build Google Play Console release bundle: flutter build appbundle
+version: 1.0.3+3
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -27,6 +29,12 @@ dependencies:
   url_launcher: ^5.4.7
   auto_size_text: ^2.1.0
   ads: ^1.7.3
+  catcher: ^0.3.14
+  sentry: ">=3.0.0 <4.0.0"
+  package_info: ^0.4.1
+  settings_ui: ^0.3.0
+  shared_preferences: ^0.5.8
+  theme_mode_handler: ^2.0.0
 
 dev_dependencies:
   flutter_test:

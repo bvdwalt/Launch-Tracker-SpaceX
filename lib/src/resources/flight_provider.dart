@@ -29,6 +29,7 @@ class FlightProvider {
   }
 
   Future<List<Flight>> fetchUpcomingFlights(http.Client client) async {
+    
     final response =
         await client.get("${EnvironmentConfig.BASE_URL}/launches/upcoming");
 

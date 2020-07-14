@@ -20,8 +20,8 @@ class FlightsBloc {
       List<Flight> flights = await _repository.fetchUpcomingFlights();
       _upcomingFlightsFetcher.add(ApiResponse.completed(flights));
     } catch (e) {
-      _upcomingFlightsFetcher.add(ApiResponse.error(e.toString()));
-      print(e);
+      _upcomingFlightsFetcher.add(ApiResponse.error("Unexpected error occurred while fetching flights"));
+    throw e;
     }
   }
 
@@ -31,8 +31,8 @@ class FlightsBloc {
       List<Flight> flights = await _repository.fetchPastFlights();
       _pastFlightsFetcher.add(ApiResponse.completed(flights));
     } catch (e) {
-      _pastFlightsFetcher.add(ApiResponse.error(e.toString()));
-      print(e);
+      _pastFlightsFetcher.add(ApiResponse.error("Unexpected error occurred while fetching flights"));
+    throw e;
     }
   }
 
