@@ -13,6 +13,26 @@ class FlightListItem extends StatefulWidget {
 }
 
 class _FlightListItemState extends State<FlightListItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        child: InkWell(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [titleColumn(), launchSiteAndDate()],
+                  ),
+                  Row(
+                    children: [rocketColumn()],
+                  ),
+                ],
+              ),
+            ),
+            onTap: () => openDetailPage()));
+  }
+
   Widget titleColumn() {
     return Expanded(
       flex: 2,
@@ -69,26 +89,6 @@ class _FlightListItemState extends State<FlightListItem> {
         ],
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: InkWell(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [titleColumn(), launchSiteAndDate()],
-                  ),
-                  Row(
-                    children: [rocketColumn()],
-                  )
-                ],
-              ),
-            ),
-            onTap: () => openDetailPage()));
   }
 
   openDetailPage() {

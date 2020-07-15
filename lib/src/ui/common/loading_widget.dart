@@ -13,7 +13,7 @@ class LoadingWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
           CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(theme.primaryColor),
+              valueColor: AlwaysStoppedAnimation(theme.accentColor),
               semanticsValue: loadingMessage),
           Container(height: 15),
           Text(loadingMessage),

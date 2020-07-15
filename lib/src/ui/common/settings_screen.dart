@@ -4,6 +4,7 @@ import 'package:package_info/package_info.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:spacex_flights/service_locator.dart';
 import 'package:spacex_flights/src/helpers/url_helper.dart';
+import 'package:spacex_flights/src/ui/common/connected_widget.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 import 'package:theme_mode_handler/theme_picker_dialog.dart';
 
@@ -79,6 +80,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SettingsSection(
               title: 'Information',
               tiles: [
+                SettingsTile(
+                  title: 'Internet Connectivity',
+                  leading: getConnectedWidget(),
+                ),
                 SettingsTile(
                     title:
                         'All dates & times are shown in the devices\' locale',
