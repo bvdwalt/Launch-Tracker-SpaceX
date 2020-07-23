@@ -49,7 +49,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
           textAlign: TextAlign.left,
           style: TextStyle(color: Colors.blue),
         ),
-      )
+      ),
+      GestureDetector(
+        onTap: () {
+          launchURL('https://ko-fi.com/bvdwalt');
+        },
+        child: Text(
+          'Ko-Fi',
+          textAlign: TextAlign.left,
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
     ];
 
     return Scaffold(
