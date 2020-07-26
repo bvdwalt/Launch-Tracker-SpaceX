@@ -79,7 +79,6 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
           ],
           bottom: TabBar(
             unselectedLabelStyle: theme.textTheme.caption,
-            unselectedLabelColor: theme.unselectedWidgetColor,
             indicatorColor: theme.selectedRowColor,
             tabs: [Tab(text: 'Upcoming'), Tab(text: 'Past')],
           ),

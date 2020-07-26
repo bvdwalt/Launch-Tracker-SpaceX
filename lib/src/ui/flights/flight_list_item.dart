@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/ui/common/DateTimeTextWidget.dart';
 import 'flight_detail.dart';
@@ -27,6 +28,7 @@ class _FlightListItemState extends State<FlightListItem> {
                   Row(
                     children: [rocketColumn()],
                   ),
+                  launchCountDownWidget()
                 ],
               ),
             ),
@@ -103,5 +105,33 @@ class _FlightListItemState extends State<FlightListItem> {
         ),
       ),
     );
+  }
+
+  launchCountDownWidget() {
+    var remaining =
+        widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
+
+    return remaining.inHours > 0 && remaining.inHours <= 48
+        ? getCountDownWidget()
+        : SizedBox.shrink();
+  }
+
+  getCountDownWidget() {
+    return StreamBuilder(
+        stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          var remaining =
+              widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
+
+          var formatMinutes = new DateFormat("mm");
+          var formatSeconds = new DateFormat("ss");
+
+          var dateString =
+              "${remaining.inHours}h ${formatMinutes.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}m ${formatSeconds.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}s ";
+          return Text(' Launching in T-${dateString} ',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.green.withOpacity(0.5)));
+        });
   }
 }
