@@ -111,7 +111,7 @@ class _FlightListItemState extends State<FlightListItem> {
     var remaining =
         widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
 
-    return remaining.inHours > 0 && remaining.inHours <= 48
+    return remaining.inHours > 0 && remaining.inHours <= 72
         ? getCountDownWidget()
         : SizedBox.shrink();
   }
