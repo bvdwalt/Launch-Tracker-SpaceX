@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:rxdart/rxdart.dart';
 import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/resources/api_response.dart';
@@ -19,9 +21,16 @@ class FlightsBloc {
     try {
       List<Flight> flights = await _repository.fetchUpcomingFlights();
       _upcomingFlightsFetcher.add(ApiResponse.completed(flights));
+    } on SocketException catch (ex) {
+      if (ex.message.startsWith("Failed host lookup:")) {
+        _upcomingFlightsFetcher.add(ApiResponse.error(
+            "No connection, please ensure you are connected to a network"));
+      }
+      throw ex;
     } catch (e) {
-      _upcomingFlightsFetcher.add(ApiResponse.error("Unexpected error occurred while fetching flights"));
-    throw e;
+      _upcomingFlightsFetcher.add(ApiResponse.error(
+          "Unexpected error occurred while fetching flights"));
+      throw e;
     }
   }
 
@@ -30,9 +39,16 @@ class FlightsBloc {
     try {
       List<Flight> flights = await _repository.fetchPastFlights();
       _pastFlightsFetcher.add(ApiResponse.completed(flights));
+    } on SocketException catch (ex) {
+      if (ex.message.startsWith("Failed host lookup:")) {
+        _pastFlightsFetcher.add(ApiResponse.error(
+            "No connection, please ensure you are connected to a network"));
+      }
+      throw ex;
     } catch (e) {
-      _pastFlightsFetcher.add(ApiResponse.error("Unexpected error occurred while fetching flights"));
-    throw e;
+      _pastFlightsFetcher.add(ApiResponse.error(
+          "Unexpected error occurred while fetching flights"));
+      throw e;
     }
   }
 

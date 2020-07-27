@@ -128,10 +128,11 @@ class _FlightListItemState extends State<FlightListItem> {
 
           var dateString =
               "${remaining.inHours}h ${formatMinutes.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}m ${formatSeconds.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}s ";
-          return Text(' Launching in T-${dateString} ',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  backgroundColor: Colors.green.withOpacity(0.5)));
+          return Text(
+            ' Launching in T-${dateString} ',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.green[300]),
+          );
         });
   }
 }
