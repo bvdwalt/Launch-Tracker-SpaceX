@@ -1,5 +1,6 @@
 class EnvironmentConfig {
-  static const SENTRY_DSN = String.fromEnvironment('SENTRY_DSN');
+  static const SENTRY_DSN =
+      String.fromEnvironment('SENTRY_DSN', defaultValue: 'https://...');
 
   static const Ad_Mob_App_ID = String.fromEnvironment('Ad_Mob_App_ID',
       defaultValue: 'ca-app-pub-7724266756224086~6556146475');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/ui/common/DateTimeTextWidget.dart';
 import 'flight_detail.dart';
@@ -13,6 +14,27 @@ class FlightListItem extends StatefulWidget {
 }
 
 class _FlightListItemState extends State<FlightListItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        child: InkWell(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [titleColumn(), launchSiteAndDate()],
+                  ),
+                  Row(
+                    children: [rocketColumn()],
+                  ),
+                  launchCountDownWidget()
+                ],
+              ),
+            ),
+            onTap: () => openDetailPage()));
+  }
+
   Widget titleColumn() {
     return Expanded(
       flex: 2,
@@ -71,26 +93,6 @@ class _FlightListItemState extends State<FlightListItem> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: InkWell(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [titleColumn(), launchSiteAndDate()],
-                  ),
-                  Row(
-                    children: [rocketColumn()],
-                  )
-                ],
-              ),
-            ),
-            onTap: () => openDetailPage()));
-  }
-
   openDetailPage() {
     Navigator.push(
       context,
@@ -103,5 +105,34 @@ class _FlightListItemState extends State<FlightListItem> {
         ),
       ),
     );
+  }
+
+  launchCountDownWidget() {
+    var remaining =
+        widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
+
+    return remaining.inHours > 0 && remaining.inHours <= 72
+        ? getCountDownWidget()
+        : SizedBox.shrink();
+  }
+
+  getCountDownWidget() {
+    return StreamBuilder(
+        stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          var remaining =
+              widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
+
+          var formatMinutes = new DateFormat("mm");
+          var formatSeconds = new DateFormat("ss");
+
+          var dateString =
+              "${remaining.inHours}h ${formatMinutes.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}m ${formatSeconds.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}s ";
+          return Text(
+            ' Launching in T-${dateString} ',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.green[300]),
+          );
+        });
   }
 }

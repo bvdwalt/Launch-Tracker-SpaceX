@@ -12,8 +12,8 @@ description: SpaceX Flight Data app built in Flutter.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # See APK sizes: flutter build apk --split-per-abi
-# Build Google Play Console release bundle: flutter build appbundle
-version: 1.0.3+3
+# Build Google Play Console release bundle: flutter build appbundle --release
+version: 1.0.4+4
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -35,6 +35,7 @@ dependencies:
   settings_ui: ^0.3.0
   shared_preferences: ^0.5.8
   theme_mode_handler: ^2.0.0
+  flutter_offline: "^0.3.0"
 
 dev_dependencies:
   flutter_test:

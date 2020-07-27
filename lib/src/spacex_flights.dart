@@ -7,7 +7,7 @@ import 'package:theme_mode_handler/theme_mode_handler.dart';
 class SpaceXFlights extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    MaterialColor myColor = MaterialColor(0xFF0033CC, {
+    MaterialColor myColor = MaterialColor(0xFF384259, {
       50: Color.fromRGBO(0, 51, 204, .1),
       100: Color.fromRGBO(0, 51, 204, .2),
       200: Color.fromRGBO(0, 51, 204, .3),

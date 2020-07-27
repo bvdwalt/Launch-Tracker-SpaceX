@@ -29,13 +29,15 @@ class FlightProvider {
   }
 
   Future<List<Flight>> fetchUpcomingFlights(http.Client client) async {
-    
     final response =
         await client.get("${EnvironmentConfig.BASE_URL}/launches/upcoming");
 
     var responseJson = _returnResponse(response);
 
-    return parseFlights(responseJson);
+    List<Flight> flights = parseFlights(responseJson);
+    flights.sort((a, b) => a.launchDateUtc.compareTo(b.launchDateUtc));
+
+    return flights;
   }
 
   Future<List<Flight>> fetchPastFlights(http.Client client) async {
@@ -45,7 +47,7 @@ class FlightProvider {
     var responseJson = _returnResponse(response);
 
     List<Flight> flights = parseFlights(responseJson);
-    flights.sort((a, b) => b.flightNumber.compareTo(a.flightNumber));
+    flights.sort((a, b) => b.launchDateUtc.compareTo(a.launchDateUtc));
 
     return flights;
   }
