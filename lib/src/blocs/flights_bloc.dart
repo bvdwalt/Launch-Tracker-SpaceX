@@ -26,11 +26,9 @@ class FlightsBloc {
         _upcomingFlightsFetcher.add(ApiResponse.error(
             "No connection, please ensure you are connected to a network"));
       }
-      throw ex;
     } catch (e) {
       _upcomingFlightsFetcher.add(ApiResponse.error(
           "Unexpected error occurred while fetching flights"));
-      throw e;
     }
   }
 
@@ -44,11 +42,9 @@ class FlightsBloc {
         _pastFlightsFetcher.add(ApiResponse.error(
             "No connection, please ensure you are connected to a network"));
       }
-      throw ex;
     } catch (e) {
       _pastFlightsFetcher.add(ApiResponse.error(
           "Unexpected error occurred while fetching flights"));
-      throw e;
     }
   }
 
