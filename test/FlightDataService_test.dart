@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spacex_flights/EnvironmentConfig.dart';
 import 'package:spacex_flights/service_locator.dart';
@@ -40,10 +42,12 @@ void main() {
       final client = getIt.get<http.Client>();
 
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-          .thenAnswer((_) async => http.Response('Internal Error', 500));
+          .thenAnswer(
+              (_) async => throw SocketException("Failed host lookup:"));
 
       when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
-          .thenAnswer((_) async => http.Response('Internal Error', 500));
+          .thenAnswer(
+              (_) async => throw SocketException("Failed host lookup:"));
 
       expect(() async => await _repository.fetchUpcomingFlights(),
           throwsException);

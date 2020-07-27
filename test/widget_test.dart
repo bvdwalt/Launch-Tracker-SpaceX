@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spacex_flights/EnvironmentConfig.dart';
 import 'package:spacex_flights/service_locator.dart';
 import 'package:spacex_flights/src/spacex_flights.dart';
+import 'package:spacex_flights/src/ui/common/error_widget.dart';
 import 'package:spacex_flights/src/ui/flights/flight_list_item.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import './data/TestUpcomingFlightObj.dart';
@@ -15,6 +16,22 @@ import 'package:http/http.dart' as http;
 
 void main() {
   group("App widget testing", () {
+    testWidgets('App loads Settings screen', (WidgetTester tester) async {
+      mockNetworkImagesFor(() async {
+        registerServices(testing: true);
+        SharedPreferences.setMockInitialValues(
+            {"user_theme_mode": "themeMode.system"});
+
+        await tester.pumpWidget(SpaceXFlights());
+
+        await tester.pumpAndSettle();
+
+        await tester.press(find.ancestor(
+            of: find.byIcon(Icons.settings),
+            matching: find.byType(IconButton)));
+      });
+    });
+
     testWidgets('App loads flight correctly', (WidgetTester tester) async {
       mockNetworkImagesFor(() async {
         registerServices(testing: true);
@@ -71,23 +88,43 @@ void main() {
       });
     });
 
-    // testWidgets('App Fails to load flights', (WidgetTester tester) async {
-    //   TestWidgetsFlutterBinding.ensureInitialized();
-    //   registerServices(testing: true);
+    testWidgets('App Fails to load flights', (WidgetTester tester) async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      registerServices(testing: true);
 
-    //   final client = getIt.get<http.Client>();
+      final client = getIt.get<http.Client>();
 
-    //   when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-    //       .thenAnswer((_) async => http.Response('Internal Error', 500));
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
+          .thenAnswer(
+              (_) async => throw SocketException("Failed host lookup:"));
 
-    //   when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
-    //       .thenAnswer((_) async => http.Response('Internal Error', 500));
+      when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
+          .thenAnswer(
+              (_) async => throw SocketException("Failed host lookup:"));
 
-    //   await tester.pumpWidget(SpaceXFlights());
+      await tester.pumpWidget(SpaceXFlights());
 
-    //   await tester.pumpAndSettle(Duration(seconds: 5));
+      await tester.pumpAndSettle(Duration(seconds: 2));
 
-    //   expect(() async => await find.byType(MyErrorWidget), findsOneWidget);
-    // });
+      var errorWidget = find.byType(MyErrorWidget);
+
+      expect(errorWidget, findsOneWidget);
+
+      await tester.tap(find.ancestor(
+          of: find.text('Retry'), matching: find.byType(FlatButton)));
+
+      await tester.pumpAndSettle();
+
+      //select the last tab (2), for Past flights
+      await tester.tap(find.byType(Tab).last);
+      await tester.pumpAndSettle();
+
+      errorWidget = find.byType(MyErrorWidget);
+
+      expect(errorWidget, findsOneWidget);
+
+      await tester.tap(find.ancestor(
+          of: find.text('Retry'), matching: find.byType(FlatButton)));
+    });
   });
 }
