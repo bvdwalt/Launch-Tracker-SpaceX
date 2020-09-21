@@ -13,7 +13,7 @@ description: SpaceX Launch Data app built in Flutter.
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # See APK sizes: flutter build apk --split-per-abi
 # Build Google Play Console release bundle: flutter build appbundle --release
-version: 1.0.4+104
+version: 1.0.5+105
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
