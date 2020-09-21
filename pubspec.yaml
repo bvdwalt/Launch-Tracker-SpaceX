@@ -1,5 +1,5 @@
 name: spacex_flights
-description: SpaceX Flight Data app built in Flutter.
+description: SpaceX Launch Data app built in Flutter.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -13,7 +13,7 @@ description: SpaceX Flight Data app built in Flutter.
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # See APK sizes: flutter build apk --split-per-abi
 # Build Google Play Console release bundle: flutter build appbundle --release
-version: 1.0.4+4
+version: 1.0.5+105
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

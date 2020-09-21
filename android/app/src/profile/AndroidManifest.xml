@@ -3,7 +3,7 @@
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
-    <application>SpaceX Flights</application>
+    <application>Launch Tracker - SpaceX</application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-7724266756224086~6556146475"/>
 </manifest>

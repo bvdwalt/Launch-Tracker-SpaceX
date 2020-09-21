@@ -62,7 +62,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('SpaceX Flights'),
+          title: Text('Launch Tracker - SpaceX'),
           actions: <Widget>[
             getConnectedWidget(),
             IconButton(

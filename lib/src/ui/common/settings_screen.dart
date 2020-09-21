@@ -42,7 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       GestureDetector(
         onTap: () {
-          launchURL('https://www.patreon.com/SpaceXFlights');
+          launchURL('https://www.patreon.com/LaunchTrackerSpaceX');
         },
         child: Text(
           'Patreon',
