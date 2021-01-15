@@ -85,9 +85,16 @@ class _FlightListItemState extends State<FlightListItem> {
           Text(widget.flight.rocket.rocketName ?? '',
               style: TextStyle(fontSize: 12)),
           Text(widget.flight.rocket.secondStage.payloads
-              .map((e) => e.orbit.toString())
-              .toSet()
-              .join(', ')),
+                      .any((element) => element.orbit == null) ||
+                  widget.flight.rocket.secondStage.payloads
+                          .map((e) => e.orbit)
+                          .length ==
+                      0
+              ? ""
+              : widget.flight.rocket.secondStage.payloads
+                  .map((e) => e.orbit)
+                  .toSet()
+                  .join(',')),
         ],
       ),
     );
