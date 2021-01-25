@@ -5,6 +5,7 @@ import 'package:spacex_flights/src/models/flight.dart';
 import 'package:spacex_flights/src/ui/common/detail_widget_with_link.dart';
 import 'package:spacex_flights/src/ui/common/detail_widget.dart';
 import 'package:spacex_flights/src/ui/common/detail_widget_tap_for_more.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
 class FlightDetail extends StatelessWidget {
   @override
@@ -14,8 +15,6 @@ class FlightDetail extends StatelessWidget {
     return Scaffold(
       body: Builder(
         builder: (builderContent) => SafeArea(
-          top: false,
-          bottom: false,
           child: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -33,7 +32,25 @@ class FlightDetail extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: flight.upcoming
+          ? FloatingActionButton(
+              child: Icon(Icons.calendar_today),
+              onPressed: () => addCalendarEvent(flight))
+          : Container(),
     );
+  }
+
+  addCalendarEvent(Flight flight) {
+    final localDateTime = flight.launchDateUtc.toLocal();
+    final Event event = Event(
+        title: 'SpaceX ${flight.missionName} (${flight.flightNumber}) launch',
+        description: '${flight.details}',
+        location: '${flight.launchSite.siteNameLong}',
+        startDate: localDateTime,
+        endDate: localDateTime,
+        allDay: false,
+        timeZone: localDateTime.timeZoneName);
+    Add2Calendar.addEvent2Cal(event);
   }
 
   SliverAppBar buildSliverAppBar(Flight flight) {
@@ -71,15 +88,23 @@ class FlightDetail extends StatelessWidget {
   List<Widget> getAllFlightDetailWidgets(
       Flight flight, BuildContext _buildContext) {
     return <Widget>[
+      getDetailWidget(
+          "Launch Date",
+          DateFormat.yMMMd().format(flight.launchDateUtc.toLocal()) +
+              ' ' +
+              DateFormat.Hms().format(flight.launchDateUtc.toLocal())),
       getDetailWidget("Flight Number", flight.flightNumber.toString()),
       getDetailWidget("Mission Name", flight.missionName),
       getDetailWidget("Launch Site", flight.launchSite.siteNameLong ?? ''),
-      getDetailWidgetTapForMore("Launch Details", flight.details, _buildContext),
+      getDetailWidgetTapForMore(
+          "Launch Details", flight.details, _buildContext),
       getDetailWidget(
           "Launch Successful",
           flight.launchSuccess == null
               ? ""
-              : flight.launchSuccess ? "Yes" : "No"),
+              : flight.launchSuccess
+                  ? "Yes"
+                  : "No"),
       getDetailWidget(
           "Launch Failure Reason",
           flight.launchSuccess == null || flight.launchSuccess == true
@@ -87,11 +112,6 @@ class FlightDetail extends StatelessWidget {
               : "${flight.launchFailureDetail.reason}"),
       getDetailWidget("Launch Tentative", flight.isTentative ? "Yes" : "No"),
       getDetailWidget("To Be Determined", flight.tbd ? "Yes" : "No"),
-      getDetailWidget(
-          "Launch Date",
-          DateFormat.yMMMd().format(flight.launchDateUtc.toLocal()) +
-              ' ' +
-              DateFormat.Hms().format(flight.launchDateUtc.toLocal())),
       getDetailWidget("Rocket Name", flight.rocket.rocketName),
       getDetailWidget(
           "First Stage Block",
@@ -137,7 +157,12 @@ class FlightDetail extends StatelessWidget {
               : flight.rocket.secondStage.block.toString()),
       getDetailWidget(
           "Payload Orbit",
-          flight.rocket.secondStage.payloads.map((e) => e.orbit).length == 0
+          flight.rocket.secondStage.payloads
+                      .any((element) => element.orbit == null) ||
+                  flight.rocket.secondStage.payloads
+                          .map((e) => e.orbit)
+                          .length ==
+                      0
               ? ""
               : flight.rocket.secondStage.payloads
                   .map((e) => e.orbit)
@@ -227,7 +252,8 @@ class FlightDetail extends StatelessWidget {
           "Reddit Launch", flight.links.redditLaunch, _buildContext),
       getDetailWidgetWithLink(
           "Reddit Recovery", flight.links.redditRecovery, _buildContext),
-      getDetailWidgetWithLink("Press Kit", flight.links.presskit, _buildContext),
+      getDetailWidgetWithLink(
+          "Press Kit", flight.links.presskit, _buildContext),
       getDetailWidgetWithLink(
           "YouTube",
           flight.links.youtubeId == null
