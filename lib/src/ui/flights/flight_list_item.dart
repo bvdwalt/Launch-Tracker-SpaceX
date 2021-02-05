@@ -30,22 +30,26 @@ class _FlightListItemState extends State<FlightListItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: InkWell(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [titleColumn(), launchSiteAndDate()],
-                  ),
-                  Row(
-                    children: [rocketColumn()],
-                  ),
-                  launchCountDownWidget()
-                ],
+      shadowColor: Theme.of(context).backgroundColor,
+      elevation: 3,
+      child: InkWell(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [titleColumn(), launchSiteAndDate()],
               ),
-            ),
-            onTap: () => openDetailPage()));
+              Row(
+                children: [rocketColumn()],
+              ),
+              launchCountDownWidget()
+            ],
+          ),
+        ),
+        onTap: () => openDetailPage(),
+      ),
+    );
   }
 
   Widget titleColumn() {
