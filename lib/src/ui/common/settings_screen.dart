@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:launch_tracker_spacex/service_locator.dart';
+import 'package:launch_tracker_spacex/src/helpers/url_helper.dart';
+import 'package:launch_tracker_spacex/src/ui/common/connected_widget.dart';
 import 'package:package_info/package_info.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:spacex_flights/service_locator.dart';
-import 'package:spacex_flights/src/helpers/url_helper.dart';
-import 'package:spacex_flights/src/ui/common/connected_widget.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 import 'package:theme_mode_handler/theme_picker_dialog.dart';
 
@@ -32,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       GestureDetector(
         onTap: () {
-          launchURL('https://github.com/bvdwalt/spacex_flights');
+          launchURL('https://github.com/bvdwalt/Launch-Tracker-SpaceX');
         },
         child: Text(
           'GitHub Repository',
@@ -125,13 +125,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   SliverAppBar buildSliverAppBar() {
     return SliverAppBar(
-        expandedHeight: 50.0,
-        floating: true,
-        pinned: false,
-        elevation: 0.0,
-        flexibleSpace: FlexibleSpaceBar(
-          centerTitle: true,
-          title: Text('Settings'),
-        ));
+      expandedHeight: 50.0,
+      floating: true,
+      pinned: false,
+      elevation: 0.0,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text('Settings'),
+      ),
+    );
   }
 }

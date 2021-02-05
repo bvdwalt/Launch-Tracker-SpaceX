@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:spacex_flights/src/models/flight.dart';
-import 'package:spacex_flights/src/ui/common/DateTimeTextWidget.dart';
+import 'package:launch_tracker_spacex/service_locator.dart';
+import 'package:launch_tracker_spacex/src/blocs/flights_bloc.dart';
+import 'package:launch_tracker_spacex/src/ui/common/DateTimeTextWidget.dart';
+import 'package:launch_tracker_spacex/src/ui/common/get_utc_date_time_from_unix.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/launch_pad_name_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/rocket_name_widget.dart';
+import 'package:spacex_api/models/launch/launch.dart';
 import 'flight_detail.dart';
 
 class FlightListItem extends StatefulWidget {
-  final Flight flight;
+  final Launch launch;
 
-  FlightListItem(this.flight);
+  FlightListItem(this.launch);
 
   @override
   _FlightListItemState createState() => _FlightListItemState();
 }
 
 class _FlightListItemState extends State<FlightListItem> {
+  SpaceXDataBloc bloc = getIt.get<SpaceXDataBloc>();
+  @override
+  void initState() {
+    super.initState();
+
+    bloc.fetchRockets();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -42,9 +55,9 @@ class _FlightListItemState extends State<FlightListItem> {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.flight.missionName ?? '',
+          Text(widget.launch.name ?? '',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Text(widget.flight.flightNumber.toString() ?? '')
+          Text(widget.launch.flightNumber.toString() ?? '')
         ],
       ),
     );
@@ -57,18 +70,16 @@ class _FlightListItemState extends State<FlightListItem> {
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Text(
-            widget.flight.launchSite.siteName ?? '',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
+          LaunchPadNameWidget(bloc: bloc, launch: widget.launch),
           DateTimeTextWidget(
-            dateTime: widget.flight.launchDateUtc,
+            dateTime: widget.launch.dateUnix != null
+                ? getUtcDateTimeFromUnix(widget.launch.dateUnix)
+                : null,
             style: TextStyle(
-                color: widget.flight.upcoming
+                color: widget.launch.upcoming
                     ? Colors.green[300]
                     : Colors.orange[300]),
-            tbd: widget.flight.tbd,
-            tentative: widget.flight.isTentative,
+            tbd: widget.launch.tbd,
           ),
         ],
       ),
@@ -81,21 +92,7 @@ class _FlightListItemState extends State<FlightListItem> {
       child: Column(
         // align the text to the left instead of centered
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(widget.flight.rocket.rocketName ?? '',
-              style: TextStyle(fontSize: 12)),
-          Text(widget.flight.rocket.secondStage.payloads
-                      .any((element) => element.orbit == null) ||
-                  widget.flight.rocket.secondStage.payloads
-                          .map((e) => e.orbit)
-                          .length ==
-                      0
-              ? ""
-              : widget.flight.rocket.secondStage.payloads
-                  .map((e) => e.orbit)
-                  .toSet()
-                  .join(',')),
-        ],
+        children: <Widget>[RocketNameWidget(bloc: bloc, launch: widget.launch)],
       ),
     );
   }
@@ -108,15 +105,16 @@ class _FlightListItemState extends State<FlightListItem> {
           return FlightDetail();
         },
         settings: RouteSettings(
-          arguments: widget.flight,
+          arguments: widget.launch,
         ),
       ),
     );
   }
 
   launchCountDownWidget() {
-    var remaining =
-        widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
+    var remaining = getUtcDateTimeFromUnix(widget.launch.dateUnix)
+        .toLocal()
+        .difference(DateTime.now());
 
     return remaining.inHours > 0 && remaining.inHours <= 72
         ? getCountDownWidget()
@@ -127,8 +125,9 @@ class _FlightListItemState extends State<FlightListItem> {
     return StreamBuilder(
         stream: Stream.periodic(Duration(seconds: 1), (i) => i),
         builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-          var remaining =
-              widget.flight.launchDateUtc.toLocal().difference(DateTime.now());
+          var remaining = getUtcDateTimeFromUnix(widget.launch.dateUnix)
+              .toLocal()
+              .difference(DateTime.now());
 
           var formatMinutes = new DateFormat("mm");
           var formatSeconds = new DateFormat("ss");
@@ -136,7 +135,7 @@ class _FlightListItemState extends State<FlightListItem> {
           var dateString =
               "${remaining.inHours}h ${formatMinutes.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}m ${formatSeconds.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}s ";
           return Text(
-            ' Launching in T-${dateString} ',
+            ' Launching in T- ${dateString} ',
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.green[300]),
           );

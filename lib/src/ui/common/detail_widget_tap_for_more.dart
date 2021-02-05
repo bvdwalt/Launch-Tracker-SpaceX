@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spacex_flights/src/ui/common/show_text_dialog.dart';
+import 'package:launch_tracker_spacex/src/ui/common/show_text_dialog.dart';
 
 getDetailWidgetTapForMore(String title, String value, BuildContext context) {
   return Row(

@@ -1,6 +1,6 @@
+import 'package:launch_tracker_spacex/service_locator.dart';
+import 'package:launch_tracker_spacex/src/spacex_flights.dart';
 import 'package:sentry/sentry.dart';
-import 'package:spacex_flights/service_locator.dart';
-import 'package:spacex_flights/src/spacex_flights.dart';
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 

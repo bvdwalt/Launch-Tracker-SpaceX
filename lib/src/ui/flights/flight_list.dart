@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:spacex_flights/EnvironmentConfig.dart';
-import 'package:spacex_flights/service_locator.dart';
-import 'package:spacex_flights/src/blocs/flights_bloc.dart';
-import 'package:spacex_flights/src/models/flight.dart';
-import 'package:spacex_flights/src/resources/api_response.dart';
-import 'package:spacex_flights/src/ui/common/connected_widget.dart';
-import 'package:spacex_flights/src/ui/common/loading_widget.dart';
-import 'package:spacex_flights/src/ui/common/error_widget.dart';
-import 'package:spacex_flights/src/ui/common/settings_screen.dart';
+import 'package:launch_tracker_spacex/EnvironmentConfig.dart';
+import 'package:launch_tracker_spacex/service_locator.dart';
+import 'package:launch_tracker_spacex/src/blocs/flights_bloc.dart';
+import 'package:launch_tracker_spacex/src/resources/api_response.dart';
+import 'package:launch_tracker_spacex/src/ui/common/connected_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/common/error_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/common/loading_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/common/settings_screen.dart';
+import 'package:spacex_api/models/launch/launch.dart';
 import 'flight_list_item.dart';
 import 'package:ads/ads.dart';
 import 'package:firebase_admob/firebase_admob.dart';
@@ -20,7 +20,7 @@ class FlightList extends StatefulWidget {
 }
 
 class FlightListState extends State<FlightList> with TickerProviderStateMixin {
-  FlightsBloc bloc = getIt.get<FlightsBloc>();
+  SpaceXDataBloc bloc = getIt.get<SpaceXDataBloc>();
   Ads appAds;
   @override
   void initState() {
@@ -44,12 +44,15 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
 
     bloc.fetchUpcomingFlights();
     bloc.fetchPastFlights();
+    bloc.fetchRockets();
+    bloc.fetchPayloads();
+    bloc.fetchLaunchpads();
   }
 
   @override
   void dispose() {
     appAds.dispose();
-    getIt.unregister<FlightsBloc>();
+    getIt.unregister<SpaceXDataBloc>();
     super.dispose();
   }
 
@@ -88,7 +91,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
             StreamBuilder(
               stream: bloc.upcomingFlights,
               builder:
-                  (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
+                  (context, AsyncSnapshot<ApiResponse<List<Launch>>> snapshot) {
                 if (snapshot.hasData) {
                   switch (snapshot.data.status) {
                     case Status.LOADING:
@@ -114,7 +117,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
             StreamBuilder(
               stream: bloc.pastFlights,
               builder:
-                  (context, AsyncSnapshot<ApiResponse<List<Flight>>> snapshot) {
+                  (context, AsyncSnapshot<ApiResponse<List<Launch>>> snapshot) {
                 if (snapshot.hasData) {
                   switch (snapshot.data.status) {
                     case Status.LOADING:
@@ -143,7 +146,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildList(List<Flight> data) {
+  Widget buildList(List<Launch> data) {
     return ListView.separated(
         itemCount: data.length,
         physics: BouncingScrollPhysics(),

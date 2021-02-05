@@ -11,19 +11,20 @@ class MyErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            AutoSizeText(
-              errorMessage,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.red),
-            ),
-            FlatButton(
-              child: Text('Retry'),
-              clipBehavior: Clip.hardEdge,
-              onPressed: onRetryPressed,
-            )
-          ]),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          AutoSizeText(
+            errorMessage,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.red),
+          ),
+          FlatButton(
+            child: Text('Retry'),
+            clipBehavior: Clip.hardEdge,
+            onPressed: onRetryPressed,
+          )
+        ],
+      ),
     );
   }
 }

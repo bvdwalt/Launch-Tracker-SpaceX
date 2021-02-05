@@ -1,16 +1,40 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:spacex_flights/src/models/flight.dart';
-import 'package:spacex_flights/src/ui/common/detail_widget_with_link.dart';
-import 'package:spacex_flights/src/ui/common/detail_widget.dart';
-import 'package:spacex_flights/src/ui/common/detail_widget_tap_for_more.dart';
-import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:launch_tracker_spacex/src/blocs/flights_bloc.dart';
+import 'package:launch_tracker_spacex/service_locator.dart';
+import 'package:launch_tracker_spacex/src/ui/common/detail_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/common/detail_widget_tap_for_more.dart';
+import 'package:launch_tracker_spacex/src/ui/common/detail_widget_with_link.dart';
+import 'package:launch_tracker_spacex/src/ui/common/get_utc_date_time_from_unix.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/launch_pad_name_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/payload_customers_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/payload_manufacturers_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/payload_mass_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/payload_nationality_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/payload_orbit_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/payload_type_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/widgets/rocket_name_widget.dart';
+import 'package:spacex_api/models/launch/launch.dart';
+import 'package:spacex_api/models/rocket/rocket.dart';
 
-class FlightDetail extends StatelessWidget {
+class FlightDetail extends StatefulWidget {
+  @override
+  _FlightDetailState createState() => _FlightDetailState();
+}
+
+class _FlightDetailState extends State<FlightDetail> {
+  SpaceXDataBloc bloc = getIt.get<SpaceXDataBloc>();
+  Rocket rocket;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Flight flight = ModalRoute.of(context).settings.arguments;
+    final Launch flight = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       body: Builder(
@@ -40,12 +64,12 @@ class FlightDetail extends StatelessWidget {
     );
   }
 
-  addCalendarEvent(Flight flight) {
-    final localDateTime = flight.launchDateUtc.toLocal();
+  addCalendarEvent(Launch flight) {
+    final localDateTime = getUtcDateTimeFromUnix(flight.dateUnix);
     final Event event = Event(
-        title: 'SpaceX ${flight.missionName} (${flight.flightNumber}) launch',
+        title: 'SpaceX ${flight.name} (${flight.flightNumber}) launch',
         description: '${flight.details}',
-        location: '${flight.launchSite.siteNameLong}',
+        location: '',
         startDate: localDateTime,
         endDate: localDateTime,
         allDay: false,
@@ -53,7 +77,7 @@ class FlightDetail extends StatelessWidget {
     Add2Calendar.addEvent2Cal(event);
   }
 
-  SliverAppBar buildSliverAppBar(Flight flight) {
+  SliverAppBar buildSliverAppBar(Launch flight) {
     return SliverAppBar(
       expandedHeight: 150.0,
       floating: true,
@@ -61,10 +85,10 @@ class FlightDetail extends StatelessWidget {
       elevation: 0.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        background: flight.links.missionPatchSmall == null
+        background: flight.links.patch.small == null
             ? Center(child: Text("No Image yet"))
             : Image.network(
-                flight.links.missionPatchSmall,
+                flight.links.patch.small,
                 fit: BoxFit.scaleDown,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent loadingProgress) {
@@ -86,179 +110,58 @@ class FlightDetail extends StatelessWidget {
   }
 
   List<Widget> getAllFlightDetailWidgets(
-      Flight flight, BuildContext _buildContext) {
+      Launch launch, BuildContext _buildContext) {
+    final dateTime = getUtcDateTimeFromUnix(launch.dateUnix);
     return <Widget>[
       getDetailWidget(
           "Launch Date",
-          DateFormat.yMMMd().format(flight.launchDateUtc.toLocal()) +
+          DateFormat.yMMMd().format(dateTime.toLocal()) +
               ' ' +
-              DateFormat.Hms().format(flight.launchDateUtc.toLocal())),
-      getDetailWidget("Flight Number", flight.flightNumber.toString()),
-      getDetailWidget("Mission Name", flight.missionName),
-      getDetailWidget("Launch Site", flight.launchSite.siteNameLong ?? ''),
+              DateFormat.Hms().format(dateTime.toLocal())),
+      getDetailWidget("Flight Number", launch.flightNumber.toString()),
+      getDetailWidget("Mission Name", launch.name),
+      getDetailWidgetWithChild(
+          "Rocket Name", RocketNameWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild("Launch Site",
+          LaunchPadNameWidget(bloc: bloc, launch: launch, shortName: false)),
       getDetailWidgetTapForMore(
-          "Launch Details", flight.details, _buildContext),
-      getDetailWidget(
-          "Launch Successful",
-          flight.launchSuccess == null
-              ? ""
-              : flight.launchSuccess
-                  ? "Yes"
-                  : "No"),
-      getDetailWidget(
-          "Launch Failure Reason",
-          flight.launchSuccess == null || flight.launchSuccess == true
-              ? ""
-              : "${flight.launchFailureDetail.reason}"),
-      getDetailWidget("Launch Tentative", flight.isTentative ? "Yes" : "No"),
-      getDetailWidget("To Be Determined", flight.tbd ? "Yes" : "No"),
-      getDetailWidget("Rocket Name", flight.rocket.rocketName),
-      getDetailWidget(
-          "First Stage Block",
-          flight.rocket.firstStage.cores.length == 0 ||
-                  flight.rocket.firstStage.cores[0].block == null
-              ? ""
-              : flight.rocket.firstStage.cores[0].block.toString()),
-      getDetailWidget(
-          "First Stage Serial",
-          flight.rocket.firstStage.cores.length == 0 ||
-                  flight.rocket.firstStage.cores[0].block == null
-              ? ""
-              : flight.rocket.firstStage.cores[0].coreSerial),
-      getDetailWidget(
-          "First Stage Reused",
-          flight.rocket.firstStage.cores.length == 0 ||
-                  flight.rocket.firstStage.cores[0].reused == null
-              ? ""
-              : flight.rocket.firstStage.cores[0].reused
-                  ? "Yes ${flight.rocket.firstStage.cores[0].flight != null ? "(" + flight.rocket.firstStage.cores[0].flight.toString() + " times)" : ""}"
-                  : "No"),
-      getDetailWidget(
-          "First Stage Landing Intent",
-          flight.rocket.firstStage.cores.length == 0 ||
-                  flight.rocket.firstStage.cores[0].landingIntent == null
-              ? ""
-              : flight.rocket.firstStage.cores[0].landingIntent
-                  ? "Yes"
-                  : "No" ?? ""),
-      getDetailWidget(
-          "First Stage Landing Successful",
-          flight.rocket.firstStage.cores.length == 0 ||
-                  flight.rocket.firstStage.cores[0].landSuccess == null
-              ? ""
-              : flight.rocket.firstStage.cores[0].landSuccess
-                  ? "Yes"
-                  : "No" ?? ""),
-      getDetailWidget(
-          "Second Stage Block",
-          flight.rocket.firstStage.cores.length == 0 ||
-                  flight.rocket.secondStage.block == null
-              ? ""
-              : flight.rocket.secondStage.block.toString()),
-      getDetailWidget(
-          "Payload Orbit",
-          flight.rocket.secondStage.payloads
-                      .any((element) => element.orbit == null) ||
-                  flight.rocket.secondStage.payloads
-                          .map((e) => e.orbit)
-                          .length ==
-                      0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .map((e) => e.orbit)
-                  .toSet()
-                  .join(',')),
-      getDetailWidget(
-          "Payload NORAD IDs",
-          flight.rocket.secondStage.payloads
-                      .where((element) => element.noradId.length != 0)
-                      .length ==
-                  0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .where((element) => element.noradId.length != 0)
-                  .map((e) => e.noradId)
-                  .toSet()
-                  .join(',')
-                  .replaceAll('[', '')
-                  .replaceAll(']', '')),
-      getDetailWidget(
-          "Payload Customers",
-          flight.rocket.secondStage.payloads
-                      .map((e) => e.customers)
-                      .where((element) => element.length != 0)
-                      .length ==
-                  0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .where((element) => element.customers.length != 0)
-                  .map((e) => e.customers)
-                  .toSet()
-                  .join(',')
-                  .replaceAll('[', '')
-                  .replaceAll(']', '')),
-      getDetailWidget(
-          "Payload Nationality",
-          flight.rocket.secondStage.payloads
-                      .map((e) => e.nationality)
-                      .where((element) => element != null)
-                      .length ==
-                  0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .where((element) => element.nationality != null)
-                  .map((e) => e.nationality)
-                  .toSet()
-                  .join(',')),
-      getDetailWidget(
-          "Payload Manufacturer",
-          flight.rocket.secondStage.payloads
-                      .map((e) => e.manufacturer)
-                      .where((element) => element != null)
-                      .length ==
-                  0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .where((element) => element.manufacturer != null)
-                  .map((e) => e.manufacturer)
-                  .toSet()
-                  .join(',')),
-      getDetailWidget(
-          "Payload Type",
-          flight.rocket.secondStage.payloads.map((e) => e.payloadType).length ==
-                  0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .map((e) => e.payloadType)
-                  .toSet()
-                  .join(',')),
-      getDetailWidget(
-          "Payload Mass (kg)",
-          flight.rocket.secondStage.payloads
-                      .map((e) => e.payloadMassKg)
-                      .where((element) => element != null)
-                      .length ==
-                  0
-              ? ""
-              : flight.rocket.secondStage.payloads
-                  .where((element) => element.payloadMassKg != null)
-                  .map((e) => e.payloadMassKg.toString())
-                  .join(',')),
+          "Launch Details", launch.details, _buildContext),
+      getDetailWidget("Launch Upcoming", launch.upcoming ? "Yes" : "No"),
+      getDetailWidget("To Be Determined", launch.tbd ? "Yes" : "No"),
+      getDetailWidgetWithChild(
+          "Payload Orbit", PayloadOrbitWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild(
+          "Payload Type", PayloadTypeWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild("Payload Nationality",
+          PayloadNationalityWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild("Payload Customers",
+          PayloadCustomerWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild("Payload Manufacturer",
+          PayloadManufacturerWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild(
+          "Payload Mass (Kg)", PayloadMassWidget(bloc: bloc, launch: launch)),
+      getDetailWidgetWithChild(
+          "Payload Mass (Lbs)",
+          PayloadMassWidget(
+            bloc: bloc,
+            launch: launch,
+            showInKillograms: false,
+          )),
       getDetailWidgetWithLink(
-          "Wikipedia Link", flight.links.wikipedia, _buildContext),
+          "Wikipedia Link", launch.links.wikipedia, _buildContext),
       getDetailWidgetWithLink(
-          "Reddit Campaign", flight.links.redditCampaign, _buildContext),
+          "Reddit Campaign", launch.links.reddit.campaign, _buildContext),
       getDetailWidgetWithLink(
-          "Reddit Launch", flight.links.redditLaunch, _buildContext),
+          "Reddit Launch", launch.links.reddit.launch, _buildContext),
       getDetailWidgetWithLink(
-          "Reddit Recovery", flight.links.redditRecovery, _buildContext),
+          "Reddit Recovery", launch.links.reddit.recovery, _buildContext),
       getDetailWidgetWithLink(
-          "Press Kit", flight.links.presskit, _buildContext),
+          "Press Kit", launch.links.presskit, _buildContext),
       getDetailWidgetWithLink(
           "YouTube",
-          flight.links.youtubeId == null
+          launch.links.youtubeId == null
               ? null
-              : 'https://www.youtube.com/watch?v=${flight.links.youtubeId}',
+              : 'https://www.youtube.com/watch?v=${launch.links.youtubeId}',
           _buildContext),
     ];
   }

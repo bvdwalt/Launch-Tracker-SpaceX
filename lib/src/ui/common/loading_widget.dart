@@ -9,14 +9,16 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
           CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(theme.accentColor),
               semanticsValue: loadingMessage),
           Container(height: 15),
           Text(loadingMessage),
-        ]));
+        ],
+      ),
+    );
   }
 }
