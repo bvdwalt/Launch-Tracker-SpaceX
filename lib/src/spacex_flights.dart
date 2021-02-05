@@ -1,7 +1,7 @@
 import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
-import 'package:spacex_flights/src/theme_mode_manager.dart';
-import 'package:spacex_flights/src/ui/flights/flight_list.dart';
+import 'package:launch_tracker_spacex/src/theme_mode_manager.dart';
+import 'package:launch_tracker_spacex/src/ui/flights/flight_list.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 
 class SpaceXFlights extends StatelessWidget {

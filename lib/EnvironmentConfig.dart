@@ -9,5 +9,5 @@ class EnvironmentConfig {
       defaultValue: 'ca-app-pub-7724266756224086/4427201800');
 
   static const BASE_URL = String.fromEnvironment('BASE_URL',
-      defaultValue: 'https://api.spacexdata.com/v3');
+      defaultValue: 'https://api.spacexdata.com/v4');
 }

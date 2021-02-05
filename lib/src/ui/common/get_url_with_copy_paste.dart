@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spacex_flights/src/helpers/url_helper.dart';
+import 'package:launch_tracker_spacex/src/helpers/url_helper.dart';
 
 getURLWithCopyPaste(BuildContext context, String url) {
   return GestureDetector(

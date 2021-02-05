@@ -13,10 +13,27 @@ getDetailWidget(String title, String value) {
           textAlign: TextAlign.left,
         )),
         Expanded(
-            child: AutoSizeText(
-          value ?? '',
-          textAlign: TextAlign.right,
-          maxLines: 2,
-        ))
+          child: AutoSizeText(
+            value ?? '',
+            textAlign: TextAlign.right,
+            maxLines: 2,
+          ),
+        )
       ]);
+}
+
+getDetailWidgetWithChild(String title, Widget widget) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      Expanded(
+          child: Text(
+        title,
+        textAlign: TextAlign.left,
+      )),
+      Expanded(child: widget)
+    ],
+  );
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spacex_flights/src/ui/common/get_url_with_copy_paste.dart';
+import 'package:launch_tracker_spacex/src/ui/common/get_url_with_copy_paste.dart';
 
 getDetailWidgetWithLink(String title, String value, BuildContext context) {
   return Row(

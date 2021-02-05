@@ -1,4 +1,4 @@
-name: spacex_flights
+name: launch_tracker_spacex
 description: Launch Tracker - SpaceX app built in Flutter.
 
 # The following defines the version and build number for your application.
@@ -13,10 +13,10 @@ description: Launch Tracker - SpaceX app built in Flutter.
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # See APK sizes: flutter build apk --split-per-abi
 # Build Google Play Console release bundle: flutter build appbundle --release
-version: 1.0.6+106
+version: 1.0.8+108
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -37,6 +37,7 @@ dependencies:
   theme_mode_handler: ^2.0.0
   flutter_offline: "^0.3.0"
   add_2_calendar: ^1.4.0
+  spacex_api: ^0.0.5
 
 dev_dependencies:
   flutter_test:

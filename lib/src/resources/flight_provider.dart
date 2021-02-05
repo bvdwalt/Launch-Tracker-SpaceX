@@ -1,14 +1,38 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:spacex_flights/EnvironmentConfig.dart';
-import 'package:spacex_flights/src/models/flight.dart';
-
+import 'package:launch_tracker_spacex/src/models/launchPad.dart';
+import 'package:spacex_api/models/landpad.dart';
+import 'package:spacex_api/models/launch/launch.dart';
+import 'package:spacex_api/models/payload.dart';
+import 'package:spacex_api/models/rocket/rocket.dart';
+import 'package:spacex_api/spacex_api.dart';
 import 'app_exception.dart';
 
 class FlightProvider {
-  static List<Flight> parseFlights(List<dynamic> list) {
-    List<Flight> flightList = list.map((i) => Flight.fromJson(i)).toList();
+  static List<Launch> parseLaunches(List<dynamic> list) {
+    List<Launch> flightList = list.map((i) => Launch.fromJson(i)).toList();
     return flightList;
+  }
+
+  static List<Rocket> parseRockets(List<dynamic> list) {
+    List<Rocket> rocketList = list.map((i) => Rocket.fromJson(i)).toList();
+    return rocketList;
+  }
+
+  static List<Landpad> parselandPads(List<dynamic> list) {
+    List<Landpad> parsedList = list.map((i) => Landpad.fromJson(i)).toList();
+    return parsedList;
+  }
+
+  static List<Payload> parsePayloads(List<dynamic> list) {
+    List<Payload> parsedList = list.map((i) => Payload.fromJson(i)).toList();
+    return parsedList;
+  }
+
+  static List<Launchpad> parseLaunchpads(List<dynamic> list) {
+    List<Launchpad> parsedList =
+        list.map((i) => Launchpad.fromJson(i)).toList();
+    return parsedList;
   }
 
   dynamic _returnResponse(http.Response response) {
@@ -28,27 +52,61 @@ class FlightProvider {
     }
   }
 
-  Future<List<Flight>> fetchUpcomingFlights(http.Client client) async {
-    final response =
-        await client.get("${EnvironmentConfig.BASE_URL}/launches/upcoming");
+  Future<List<Launch>> getAllLaunches(SpaceXApi api,
+      {bool upcoming = false, bool past = false}) async {
+    final response = await api.getAllLaunches();
 
     var responseJson = _returnResponse(response);
 
-    List<Flight> flights = parseFlights(responseJson);
-    flights.sort((a, b) => a.launchDateUtc.compareTo(b.launchDateUtc));
+    List<Launch> launches = parseLaunches(responseJson);
 
-    return flights;
+    if (upcoming) {
+      launches.sort((a, b) => a.flightNumber.compareTo(b.flightNumber));
+      return launches.where((launch) => launch.upcoming).toList();
+    } else if (past) {
+      launches.sort((a, b) => b.flightNumber.compareTo(a.flightNumber));
+      return launches.where((launch) => !launch.upcoming).toList();
+    }
+    return launches;
   }
 
-  Future<List<Flight>> fetchPastFlights(http.Client client) async {
-    final response =
-        await client.get("${EnvironmentConfig.BASE_URL}/launches/past");
+  Future<List<Rocket>> getAllRockets(SpaceXApi api) async {
+    final response = await api.getAllRockets();
 
     var responseJson = _returnResponse(response);
 
-    List<Flight> flights = parseFlights(responseJson);
-    flights.sort((a, b) => b.launchDateUtc.compareTo(a.launchDateUtc));
+    List<Rocket> rockets = parseRockets(responseJson);
 
-    return flights;
+    return rockets;
+  }
+
+  Future<List<Landpad>> getAllLandpads(SpaceXApi api) async {
+    final response = await api.getAllLandpads();
+
+    var responseJson = _returnResponse(response);
+
+    List<Landpad> landPads = parselandPads(responseJson);
+
+    return landPads;
+  }
+
+  Future<List<Payload>> getAllPayloads(SpaceXApi api) async {
+    final response = await api.getAllPayloads();
+
+    var responseJson = _returnResponse(response);
+
+    List<Payload> payloads = parsePayloads(responseJson);
+
+    return payloads;
+  }
+
+  Future<List<Launchpad>> getAllLaunchPads(SpaceXApi api) async {
+    final response = await api.getAllLaunchPads();
+
+    var responseJson = _returnResponse(response);
+
+    List<Launchpad> launchPads = parseLaunchpads(responseJson);
+
+    return launchPads;
   }
 }
