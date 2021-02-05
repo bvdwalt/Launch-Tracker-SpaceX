@@ -149,7 +149,7 @@ class FlightListState extends State<FlightList> with TickerProviderStateMixin {
   Widget buildList(List<Launch> data) {
     return ListView.separated(
         itemCount: data.length,
-        physics: BouncingScrollPhysics(),
+        physics: ClampingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return FlightListItem(data[index]);
         },

@@ -26,15 +26,19 @@ class PayloadNationalityWidget extends StatelessWidget {
               return Text('loading...', style: TextStyle(fontSize: 12));
               break;
             case Status.COMPLETED:
-              final payload = snapshot.data.data
-                  .toList()
-                  .where((payload) => payload.id == launch.payloads.first)
-                  .first;
-              return AutoSizeText(
-                payload.nationalities.join(","),
-                textAlign: TextAlign.right,
-                maxLines: 2,
-              );
+              if (launch.payloads?.length != 0) {
+                final payload = snapshot.data.data
+                    .toList()
+                    .where((payload) => payload.id == launch.payloads.first)
+                    .first;
+                return AutoSizeText(
+                  payload.nationalities.join(","),
+                  textAlign: TextAlign.right,
+                  maxLines: 2,
+                );
+              } else {
+                return AutoSizeText('', textAlign: TextAlign.right);
+              }
               break;
             case Status.ERROR:
               return Text('Not Found', style: TextStyle(fontSize: 12));

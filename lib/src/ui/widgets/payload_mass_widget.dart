@@ -29,27 +29,30 @@ class PayloadMassWidget extends StatelessWidget {
               return Text('loading...', style: TextStyle(fontSize: 12));
               break;
             case Status.COMPLETED:
-              final payload = snapshot.data.data
-                  .toList()
-                  .where((payload) => payload.id == launch.payloads.first)
-                  .first;
-
-              if (showInKillograms) {
-                return AutoSizeText(
-                  payload?.massKg == null
-                      ? ''
-                      : NumberFormat.decimalPattern().format(payload.massKg),
-                  textAlign: TextAlign.right,
-                  maxLines: 2,
-                );
+              if (launch.payloads?.length != 0) {
+                final payload = snapshot.data.data
+                    .toList()
+                    .where((payload) => payload.id == launch.payloads.first)
+                    .first;
+                if (showInKillograms) {
+                  return AutoSizeText(
+                    payload?.massKg == null
+                        ? ''
+                        : NumberFormat.decimalPattern().format(payload.massKg),
+                    textAlign: TextAlign.right,
+                    maxLines: 2,
+                  );
+                } else {
+                  return AutoSizeText(
+                    payload?.massLbs == null
+                        ? ''
+                        : NumberFormat.decimalPattern().format(payload.massLbs),
+                    textAlign: TextAlign.right,
+                    maxLines: 2,
+                  );
+                }
               } else {
-                return AutoSizeText(
-                  payload?.massLbs == null
-                      ? ''
-                      : NumberFormat.decimalPattern().format(payload.massKg),
-                  textAlign: TextAlign.right,
-                  maxLines: 2,
-                );
+                return AutoSizeText('', textAlign: TextAlign.right);
               }
               break;
             case Status.ERROR:

@@ -13,7 +13,7 @@ description: Launch Tracker - SpaceX app built in Flutter.
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # See APK sizes: flutter build apk --split-per-abi
 # Build Google Play Console release bundle: flutter build appbundle --release
-version: 1.0.8+108
+version: 1.0.9+109
 
 environment:
   sdk: ">=2.2.0 <3.0.0"
