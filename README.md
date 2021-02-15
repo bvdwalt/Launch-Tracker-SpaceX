@@ -1,6 +1,5 @@
 # Launch Tracker - SpaceX
-[![Build Status](https://travis-ci.org/bvdwalt/Launch-Tracker-SpaceX.svg?branch=master)](https://travis-ci.org/bvdwalt/Launch-Tracker-SpaceX)
-[![Codemagic build status](https://api.codemagic.io/apps/5ea050d32173e400085811fe/5ea050d32173e400085811fd/status_badge.svg)](https://codemagic.io/apps/5ea050d32173e400085811fe/5ea050d32173e400085811fd/latest_build)
+[![Build Status](https://www.travis-ci.com/bvdwalt/Launch-Tracker-SpaceX.svg?branch=master)](https://www.travis-ci.com/bvdwalt/Launch-Tracker-SpaceX.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/bvdwalt/Launch-Tracker-SpaceX/badge.svg?branch=master)](https://coveralls.io/github/bvdwalt/Launch-Tracker-SpaceX?branch=master)
 
 <a href='https://play.google.com/store/apps/details?id=com.bvdwalt.spacex_flights&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img height="50" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
