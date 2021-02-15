@@ -1,24 +1,21 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:launch_tracker_spacex/EnvironmentConfig.dart';
 import 'package:launch_tracker_spacex/service_locator.dart';
 import 'package:launch_tracker_spacex/src/spacex_flights.dart';
 import 'package:launch_tracker_spacex/src/ui/common/error_widget.dart';
 import 'package:launch_tracker_spacex/src/ui/flights/flight_list_item.dart';
-import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:network_image_mock/network_image_mock.dart';
-import './data/TestUpcomingFlightObj.dart';
-import './data/TestPastFlightObj.dart';
-import 'package:http/http.dart' as http;
+import 'setup_mock_api_responses.dart';
 
 void main() {
-  group("App widget testing", () {
+  group("App widget testing:", () {
     testWidgets('App loads Settings screen', (WidgetTester tester) async {
       mockNetworkImagesFor(() async {
         registerServices(testing: true);
+        SetupMockAPIResponses.MockDataAPIResponses();
+
         SharedPreferences.setMockInitialValues(
             {"user_theme_mode": "themeMode.system"});
 
@@ -35,29 +32,17 @@ void main() {
     testWidgets('App loads flight correctly', (WidgetTester tester) async {
       mockNetworkImagesFor(() async {
         registerServices(testing: true);
+        SetupMockAPIResponses.MockDataAPIResponses();
+
         SharedPreferences.setMockInitialValues(
             {"user_theme_mode": "themeMode.system"});
-
-        final client = getIt.get<http.Client>();
-
-        when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-            .thenAnswer((_) async {
-          sleep(Duration(seconds: 2));
-          return http.Response(TestUpcomingFlightObj.flightJson, 200);
-        });
-
-        when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
-            .thenAnswer((_) async {
-          sleep(Duration(seconds: 2));
-          return http.Response(TestPastFlightObj.flightJson, 200);
-        });
 
         await tester.pumpWidget(SpaceXFlights());
 
         await tester.pumpAndSettle();
 
-        expect(find.text('110'), findsOneWidget);
-        expect(find.text('ANASIS-II'), findsOneWidget);
+        expect(find.text('116'), findsOneWidget);
+        expect(find.text('Starlink-17 (v1.0)'), findsOneWidget);
 
         //find flight number 110 and tap the item to bring up the detail screen
         await tester.tap(find.byType(FlightListItem).first);
@@ -89,22 +74,12 @@ void main() {
     });
 
     testWidgets('App Fails to load flights', (WidgetTester tester) async {
-      TestWidgetsFlutterBinding.ensureInitialized();
       registerServices(testing: true);
-
-      final client = getIt.get<http.Client>();
-
-      when(client.get('${EnvironmentConfig.BASE_URL}/launches/upcoming'))
-          .thenAnswer(
-              (_) async => throw SocketException("Failed host lookup:"));
-
-      when(client.get('${EnvironmentConfig.BASE_URL}/launches/past'))
-          .thenAnswer(
-              (_) async => throw SocketException("Failed host lookup:"));
+      SetupMockAPIResponses.MockErrorAPIResponses();
 
       await tester.pumpWidget(SpaceXFlights());
 
-      await tester.pumpAndSettle(Duration(seconds: 2));
+      await tester.pumpAndSettle(Duration(seconds: 3));
 
       var errorWidget = find.byType(MyErrorWidget);
 
@@ -115,16 +90,14 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      //select the last tab (2), for Past flights
-      await tester.tap(find.byType(Tab).last);
-      await tester.pumpAndSettle();
+      // //select the last tab (2), for Past flights
+      // await tester.tap(find.byType(Tab).last);
+      // await tester.pumpAndSettle();
 
-      errorWidget = find.byType(MyErrorWidget);
+      // expect(errorWidget, findsOneWidget);
 
-      expect(errorWidget, findsOneWidget);
-
-      await tester.tap(find.ancestor(
-          of: find.text('Retry'), matching: find.byType(FlatButton)));
+      // await tester.tap(find.ancestor(
+      //     of: find.text('Retry'), matching: find.byType(FlatButton)));
     });
   });
 }
