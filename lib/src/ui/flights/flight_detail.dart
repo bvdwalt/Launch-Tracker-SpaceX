@@ -79,11 +79,12 @@ class _FlightDetailState extends State<FlightDetail> {
 
   SliverAppBar buildSliverAppBar(Launch flight) {
     return SliverAppBar(
-      expandedHeight: 150.0,
+      expandedHeight: 125.0,
       floating: true,
-      pinned: false,
+      pinned: true,
       elevation: 0.0,
       flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.parallax,
         centerTitle: true,
         background: flight.links.patch.small == null
             ? Center(child: Text("No Image yet"))
@@ -93,15 +94,12 @@ class _FlightDetailState extends State<FlightDetail> {
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent loadingProgress) {
                   if (loadingProgress == null) return child;
-                  var theme = Theme.of(context);
                   return Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(theme.primaryColor),
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes
-                          : null,
-                    ),
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes
+                            : null),
                   );
                 },
               ),

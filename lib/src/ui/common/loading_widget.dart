@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:launch_tracker_spacex/src/ui/common/getTextDirection.dart';
 
 class LoadingWidget extends StatelessWidget {
   final String loadingMessage;
@@ -14,9 +15,15 @@ class LoadingWidget extends StatelessWidget {
         children: <Widget>[
           CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(theme.accentColor),
-              semanticsValue: loadingMessage),
+              semanticsValue: Text(
+                loadingMessage,
+                textDirection: getTextDirection(),
+              ).toString()),
           Container(height: 15),
-          Text(loadingMessage),
+          Text(
+            loadingMessage,
+            textDirection: getTextDirection(),
+          ),
         ],
       ),
     );

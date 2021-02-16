@@ -139,7 +139,7 @@ class _FlightListItemState extends State<FlightListItem> {
           var dateString =
               "${remaining.inHours}h ${formatMinutes.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}m ${formatSeconds.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}s ";
           return Text(
-            ' Launching in T- ${dateString} ',
+            ' Launching in T - ${dateString} ',
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.green[300]),
           );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:launch_tracker_spacex/service_locator.dart';
 import 'package:launch_tracker_spacex/src/spacex_flights.dart';
-import 'package:launch_tracker_spacex/src/ui/common/error_widget.dart';
+import 'package:launch_tracker_spacex/src/ui/common/myError_widget.dart';
 import 'package:launch_tracker_spacex/src/ui/flights/flight_list_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:network_image_mock/network_image_mock.dart';
@@ -12,30 +12,25 @@ import 'setup_mock_api_responses.dart';
 void main() {
   group("App widget testing:", () {
     testWidgets('App loads Settings screen', (WidgetTester tester) async {
-      mockNetworkImagesFor(() async {
-        registerServices(testing: true);
-        SetupMockAPIResponses.MockDataAPIResponses();
+      registerServices(testing: true);
 
-        SharedPreferences.setMockInitialValues(
-            {"user_theme_mode": "themeMode.system"});
+      SharedPreferences.setMockInitialValues(
+          {"user_theme_mode": "themeMode.system"});
 
-        await tester.pumpWidget(SpaceXFlights());
+      SetupMockAPIResponses.MockDataAPIResponses();
 
-        await tester.pumpAndSettle();
+      await tester.pumpWidget(SpaceXFlights());
 
-        await tester.press(find.ancestor(
-            of: find.byIcon(Icons.settings),
-            matching: find.byType(IconButton)));
-      });
+      await tester.pumpAndSettle();
+
+      await tester.press(find.ancestor(
+          of: find.byIcon(Icons.settings), matching: find.byType(IconButton)));
     });
 
     testWidgets('App loads flight correctly', (WidgetTester tester) async {
       mockNetworkImagesFor(() async {
         registerServices(testing: true);
         SetupMockAPIResponses.MockDataAPIResponses();
-
-        SharedPreferences.setMockInitialValues(
-            {"user_theme_mode": "themeMode.system"});
 
         await tester.pumpWidget(SpaceXFlights());
 

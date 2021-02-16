@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:launch_tracker_spacex/src/ui/common/getTextDirection.dart';
 
 class DateTimeTextWidget extends StatefulWidget {
   final DateTime dateTime;
@@ -26,6 +27,7 @@ class _DateTimeTextWidgetState extends State<DateTimeTextWidget> {
                   "\n" +
                   DateFormat.Hms().format(dateTime),
           textAlign: TextAlign.right,
+          textDirection: getTextDirection(),
           style: widget.style);
     }
 
@@ -34,6 +36,7 @@ class _DateTimeTextWidgetState extends State<DateTimeTextWidget> {
             "\n" +
             DateFormat.Hms().format(dateTime),
         textAlign: TextAlign.right,
+        textDirection: getTextDirection(),
         style: widget.style);
   }
 }

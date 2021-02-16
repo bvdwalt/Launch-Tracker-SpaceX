@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:launch_tracker_spacex/service_locator.dart';
 import 'package:launch_tracker_spacex/src/resources/spacex_data_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spacex_api/models/launch/launch.dart';
 import 'setup_mock_api_responses.dart';
 
@@ -11,9 +10,6 @@ void main() {
       TestWidgetsFlutterBinding.ensureInitialized();
       registerServices(testing: true);
       SetupMockAPIResponses.MockDataAPIResponses();
-
-      SharedPreferences.setMockInitialValues(
-          {"user_theme_mode": "themeMode.system"});
 
       final _repository = getIt.get<SpaceXDataRepository>();
 
